@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterHealthComponent))]
@@ -8,6 +9,7 @@ using UnityEngine;
 public abstract class Character : MonoBehaviour
 {
     protected CharacterHealthComponent _healthComponent;
+    public CharacterHealthComponent HealthComponent { get { return _healthComponent; } }
     protected CharacterMovementComponent _characterMovementComponent;
     protected SpriteRenderer _spriteRenderer;
     protected BoxCollider2D _boxCollider;
@@ -46,18 +48,12 @@ public abstract class Character : MonoBehaviour
         
     }
 
-    protected virtual void OnCollisionEnter2D(Collision2D other) { }
-    protected virtual void OnCollisionExit2D(Collision2D other) { }
-    protected virtual void OnCollisionStay2D(Collision2D other) { }
+    protected virtual void OnTriggerEnter2D(Collider2D other) { }
+    protected virtual void OnTriggerExit2D(Collider2D other) { }
+    protected virtual void OnTriggerStay2D(Collider2D other) { }
 
     public bool IsAlive()
     {
-        return GetHealthComponent().IsAlive();
+        return HealthComponent ? HealthComponent.IsAlive() : false;
     }
-
-    public CharacterHealthComponent GetHealthComponent() 
-    { 
-        return _healthComponent; 
-    }
-
 }

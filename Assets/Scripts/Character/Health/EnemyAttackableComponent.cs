@@ -24,7 +24,7 @@ public class EnemyAttackableComponent : MonoBehaviour
         if (_canAttack)
         {
             Debug.Log("Attack Player");
-            playerToAttack.GetHealthComponent().DoDamage(_damageToDeal);
+            playerToAttack.HealthComponent?.DoDamage(_damageToDeal);
 
             StartCoroutine(WaitUntilAttackCooldownOver());
         }
@@ -37,6 +37,8 @@ public class EnemyAttackableComponent : MonoBehaviour
 
     private IEnumerator WaitUntilAttackCooldownOver()
     {
+        _canAttack = false;
+
         yield return _waitBetweenAttacks;
 
         _canAttack = true;

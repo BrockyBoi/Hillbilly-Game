@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class EnemySpawnerController : MonoBehaviour
 {
+    public static EnemySpawnerController Instance { get; private set; }
+
     private float _currentSpawnFrequency;
 
     [Title("Prefabs")]
     [Required, SerializeField]
-    private GameObject _enemyToSpawn;
+    private Enemy _enemyToSpawn;
 
     [Title("Spawn Parameters")]
     [SerializeField]
@@ -35,6 +37,13 @@ public class EnemySpawnerController : MonoBehaviour
     WaitForSeconds _waitToSpawnEnemy;
     WaitForSeconds _waitToChangeDifficulty;
 
+    private List<Enemy> _enemiesInGame = new List<Enemy>();
+    public List<Enemy> EnemiesInGame { get { return _enemiesInGame; } }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -83,9 +92,8 @@ public class EnemySpawnerController : MonoBehaviour
     }
 
 
-    void SpawnEnemy()
+    private void SpawnEnemy()
     {
-        Debug.Log("Spawn enemy");
         Vector2 randomCircleValue = Random.insideUnitCircle;
         Vector2 playerPos = MainPlayer.Instance.transform.position;
 
@@ -93,6 +101,19 @@ public class EnemySpawnerController : MonoBehaviour
         dirVector.Normalize();
 
         Vector2 spawnPos = playerPos + (dirVector * Random.Range(_minDistanceSpawnedFromPlayer, _maxDistanceSpawnedFromPlayer));
-        Instantiate(_enemyToSpawn, spawnPos, Quaternion.identity);
+        Enemy enemy = Instantiate<Enemy>(_enemyToSpawn, spawnPos, Quaternion.identity);
+        _enemiesInGame.Add(enemy);
+
+        enemy.HealthComponent.OnKilled -= RemoveEnemyFromGame;
+        enemy.HealthComponent.OnKilled += RemoveEnemyFromGame;
+    }
+
+    public void RemoveEnemyFromGame(Character enemyKilled)
+    {
+        if (_enemiesInGame.Contains(enemyKilled as Enemy))
+        {
+            _enemiesInGame.Remove(enemyKilled as Enemy);
+            enemyKilled.HealthComponent.OnKilled -= RemoveEnemyFromGame;
+        }
     }
 }

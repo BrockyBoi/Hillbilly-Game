@@ -8,6 +8,9 @@ public class CharacterHealthComponent : MonoBehaviour
     private float _maxHealth = 100f;
     private float _currentHealth = 100;
 
+    public delegate void EOnKilled(Character characterKilled);
+    public event EOnKilled OnKilled;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,11 +33,11 @@ public class CharacterHealthComponent : MonoBehaviour
 
     public void DoDamage(float damage)
     {
-        if (damage > 0)
+        if (IsAlive() && damage > 0)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
 
-            if (_currentHealth < 0 )
+            if (_currentHealth <= 0 )
             {
                 Die();
             }
@@ -43,6 +46,8 @@ public class CharacterHealthComponent : MonoBehaviour
 
     protected virtual void Die()
     {
+        OnKilled?.Invoke(GetOwningCharacter());
+
         Destroy(gameObject);
     }
 
@@ -54,5 +59,10 @@ public class CharacterHealthComponent : MonoBehaviour
     public bool IsAlive()
     {
         return _currentHealth > 0;
+    }
+
+    protected Character GetOwningCharacter()
+    {
+        return GetComponent<Character>();
     }
 }

@@ -543,6 +543,63 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1584279131}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1160887035 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7223614064981767247, guid: 80d5dd29224aa47468befc79ec61e5de, type: 3}
+  m_PrefabInstance: {fileID: 877282624164414912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1160887036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160887035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e20567ed76423cd41b690600c710da22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weaponData:
+    WeaponID: Proto1
+    DefaultFireRate: 0.2
+    MaxFireRate: 0.1
+    DefaultProjectileData:
+      ProjectileSpeed: 5
+      ProjectileSizeMultiplier: 1
+      DamageToDeal: 10
+      TimeBetweenDamage: 0
+      WeaponDuration: 0
+      NumberOfEnemiesCanPassThrough: 1
+      CanPassThroughUnlimitedEnemies: 0
+  _projectilePrefab: {fileID: 5970115702615538014, guid: 22173777cf11f3f4c8f99dbcabf0fba2, type: 3}
+--- !u!50 &1160887044
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1160887035}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1584279130
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,7 +666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152f9a9dcd56c3742a048a7c5c5a4162, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyToSpawn: {fileID: 809142628805603757, guid: 1642f14113b2838409290e79526d7df7, type: 3}
+  _enemyToSpawn: {fileID: 5063695708045683772, guid: 1642f14113b2838409290e79526d7df7, type: 3}
   _maxSpawnRate: 0.5
   _startingSpawnFrequency: 2.5
   _timeBetweenDifficultyChange: 15
@@ -698,7 +755,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7223614064981767247, guid: 80d5dd29224aa47468befc79ec61e5de, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1160887036}
+    - targetCorrespondingSourceObject: {fileID: 7223614064981767247, guid: 80d5dd29224aa47468befc79ec61e5de, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1160887044}
   m_SourcePrefab: {fileID: 100100000, guid: 80d5dd29224aa47468befc79ec61e5de, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

@@ -1,94 +1,118 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum WeaponModifiers
+namespace Weaponry
 {
-    Speed, Number, Size, FireRate
-}
-
-public abstract class PlayerWeapon : MonoBehaviour
-{
-    [Title("Weapon Id")]
-    protected string Id = string.Empty;
-    public string WeaponId { get { return Id; } }
-
-    [Title("Weapon Properties")]
-    [SerializeField]
-    protected float _defaultWeaponSpeed = 5;
-    protected float _weaponSpeedModifier = 1f;
-
-    [SerializeField]
-    protected int _defaultNumberOfProjectiles = 1;
-    protected int _weaponProjectileNumberModifier = 1;
-
-    [SerializeField]
-    protected float _defaultWeaponSize = 1f;
-    protected float _weaponSizeModifier = 1f;
-
-    [SerializeField]
-    protected float _defaultFireRate = 1f;
-    [SerializeField]
-    protected float _maxFireRate = .2f;
-    protected float _weaponFireRateModifier = 1f;
-
-    [Title("Prefab")]
-    [SerializeField]
-    protected GameObject _projectilePrefab;
-
-    private WaitForSeconds _waitForNextFire;
-
-    public void Initialize()
+    public enum WeaponAttribute
     {
-        _waitForNextFire = new WaitForSeconds(_defaultFireRate);
-        StartCoroutine(FireWeaponCoroutine());
+        Speed, NumberOfProjectiles, Size, FireRate, NumberOfEnemiesCanPassThrough, Damage, Duration
     }
 
-    IEnumerator FireWeaponCoroutine()
+    [Serializable]
+    public struct WeaponData
     {
-        while (MainPlayer.Instance.IsAlive())
-        {
-            yield return _waitForNextFire;
+        public string WeaponID;
+        public float DefaultFireRate;
+        public float MaxFireRate;
 
-            FireWeapon();
-        }
+        public ProjectileData DefaultProjectileData;
     }
 
-    protected abstract void FireWeapon();
-
-    public void ModifyWeapon(WeaponModifiers modifier, float changeAmount)
+    public abstract class PlayerWeapon : MonoBehaviour
     {
-        switch (modifier)
+        [Title("Weapon Properties")]
+        [SerializeField]
+        protected WeaponData _weaponData;
+        public WeaponData WeaponData { get { return _weaponData; } }
+
+        Dictionary<WeaponAttribute, float> _weaponModifiers = new Dictionary<WeaponAttribute, float>();
+
+        [Title("Prefab")]
+        [SerializeField]
+        protected Projectile _projectilePrefab;
+
+        private WaitForSeconds _waitForNextFire;
+
+        private MainPlayer _mainPlayer;
+
+        public void Initialize()
         {
-            case WeaponModifiers.Number:
-                {
-                    _weaponSpeedModifier += changeAmount;
-                    break;
-                }
-
-            case WeaponModifiers.Size:
-                {
-                    _weaponSizeModifier += changeAmount;
-                    break;
-                }
-
-            case WeaponModifiers.Speed:
-                {
-                    _weaponSpeedModifier += changeAmount;
-                    break;
-                }
-
-            case WeaponModifiers.FireRate:
-                {
-                    _weaponFireRateModifier = Mathf.Clamp(_weaponFireRateModifier - changeAmount, _maxFireRate, _defaultFireRate);
-                    break;
-                }
-
-            default:
-                {
-                    break;
-                }
+            _mainPlayer = MainPlayer.Instance;
+            _waitForNextFire = new WaitForSeconds(WeaponData.DefaultFireRate);
+            StartCoroutine(FireWeaponCoroutine());
         }
+
+        IEnumerator FireWeaponCoroutine()
+        {
+            while (_mainPlayer.IsAlive())
+            {
+                yield return _waitForNextFire;
+
+                float weaponSpeed = WeaponData.DefaultProjectileData.ProjectileSpeed + GetWeaponModifier(WeaponAttribute.Speed);
+                float weaponSize = WeaponData.DefaultProjectileData.ProjectileSizeMultiplier + GetWeaponModifier(WeaponAttribute.Size);
+                float damageDealt = WeaponData.DefaultProjectileData.DamageToDeal + GetWeaponModifier(WeaponAttribute.Damage);
+                float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
+                float weaponDuration = WeaponData.DefaultProjectileData.WeaponDuration + GetWeaponModifier(WeaponAttribute.Duration);
+                int numberOfEnemiesToPassThrough = WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough + (int)GetWeaponModifier(WeaponAttribute.NumberOfEnemiesCanPassThrough);
+                bool canPassThroughUnlimitedEnemies = WeaponData.DefaultProjectileData.CanPassThroughUnlimitedEnemies;
+                FireWeapon(new ProjectileData(weaponSpeed, weaponSize, damageDealt, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies));
+            }
+        }
+
+        protected float GetWeaponModifier(WeaponAttribute weaponModifier)
+        {
+            if (!_weaponModifiers.ContainsKey(weaponModifier))
+            {
+                float defaultValue = 1;
+                if (weaponModifier == WeaponAttribute.NumberOfEnemiesCanPassThrough || weaponModifier == WeaponAttribute.NumberOfProjectiles)
+                {
+                    defaultValue = 0;
+                }
+
+                _weaponModifiers.Add(weaponModifier, defaultValue);
+            }
+
+            return _weaponModifiers[weaponModifier] + _mainPlayer.ArsenalComponent.GetWeaponModifier(weaponModifier);
+        }
+
+        protected void SetWeaponModifier(WeaponAttribute weaponModifier, float newValue)
+        {
+            if (!_weaponModifiers.ContainsKey(weaponModifier))
+            {
+                float defaultValue = 1;
+                if (weaponModifier == WeaponAttribute.NumberOfEnemiesCanPassThrough || weaponModifier == WeaponAttribute.NumberOfProjectiles)
+                {
+                    defaultValue = 0;
+                }
+
+                _weaponModifiers.Add(weaponModifier, defaultValue);
+            }
+
+            _weaponModifiers[weaponModifier] = newValue;
+        }
+
+        public void ModifyWeapon(WeaponAttribute modifier, float changeAmount)
+        {
+            switch (modifier)
+            {
+                case WeaponAttribute.FireRate:
+                    {
+                        SetWeaponModifier(modifier, GetWeaponModifier(modifier) - changeAmount);
+                        _waitForNextFire = new WaitForSeconds(Mathf.Clamp(WeaponData.DefaultFireRate - GetWeaponModifier(WeaponAttribute.FireRate), WeaponData.MaxFireRate, WeaponData.DefaultFireRate));
+                        break;
+                    }
+
+                default:
+                    {
+                        SetWeaponModifier(modifier, GetWeaponModifier(modifier) + changeAmount);
+                        break;
+                    }
+            }
+        }
+
+        protected abstract void FireWeapon(ProjectileData projectileData);
     }
 }

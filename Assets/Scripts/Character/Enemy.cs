@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyAttackableComponent))]
-[RequireComponent (typeof(EnemyMovementComponent))]
+[RequireComponent(typeof(EnemyMovementComponent))]
+[RequireComponent(typeof(EnemyHealthComponent))]
 public class Enemy : Character
 {
     private EnemyAttackableComponent _attackableComponent;
@@ -16,9 +17,9 @@ public class Enemy : Character
     }
 
     #region Collisions
-    protected override void OnCollisionEnter2D(Collision2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
-        base.OnCollisionEnter2D(other);
+        base.OnTriggerEnter2D(other);
 
         if (!IsAlive())
         {
@@ -28,13 +29,13 @@ public class Enemy : Character
         MainPlayer mainPlayer = other.gameObject.GetComponent<MainPlayer>();
         if (mainPlayer != null)
         {
-            _attackableComponent.AttackPlayer(mainPlayer);
+            _attackableComponent?.AttackPlayer(mainPlayer);
         }
     }
 
-    protected override void OnCollisionStay2D(Collision2D other)
+    protected override void OnTriggerStay2D(Collider2D other)
     {
-        base.OnCollisionStay2D(other);
+        base.OnTriggerStay2D(other);
 
         if (!IsAlive())
         {
@@ -44,7 +45,7 @@ public class Enemy : Character
         MainPlayer mainPlayer = other.gameObject.GetComponent<MainPlayer>();
         if (mainPlayer != null)
         {
-            _attackableComponent.AttackPlayer(mainPlayer);
+            _attackableComponent?.AttackPlayer(mainPlayer);
         }
     }
     #endregion

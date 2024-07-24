@@ -2,62 +2,71 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerArsenalComponent : MonoBehaviour
+namespace Weaponry
 {
-    [SerializeField]
-    int _maxWeaponsAllowed = 5;
-
-    Dictionary<string, PlayerWeapon> _playerWeapons;
-
-    Dictionary<WeaponModifiers, float> _weaponModifiers;
-
-    private void Start()
+    public class PlayerArsenalComponent : MonoBehaviour
     {
-        _weaponModifiers = new Dictionary<WeaponModifiers, float>()
-        { 
-            { WeaponModifiers.Speed, 1 }, 
-            { WeaponModifiers.Speed, 1 }, 
-            { WeaponModifiers.FireRate, 1 }, 
-            { WeaponModifiers.Size, 1 } 
-        }; 
-    }
+        [SerializeField]
+        int _maxWeaponsAllowed = 5;
 
-    public void SetWeaponModiferAmount(WeaponModifiers weaponModifier, float amount)
-    {
-        _weaponModifiers[weaponModifier] = amount;
-    }
+        Dictionary<string, PlayerWeapon> _playerWeapons = new Dictionary<string, PlayerWeapon>();
 
-    public void IncreaseWeaponModifier(WeaponModifiers weaponModifier, float amount) 
-    {
-        _weaponModifiers[weaponModifier] += amount;
-    }
+        Dictionary<WeaponAttribute, float> _weaponModifiers = new Dictionary<WeaponAttribute, float>();
 
-    public void AddWeapon(PlayerWeapon weapon)
-    {
-        if (_playerWeapons.Count < _maxWeaponsAllowed && !_playerWeapons.ContainsKey(weapon.WeaponId))
+        private void Start()
         {
-            _playerWeapons.Add(weapon.WeaponId, weapon);
-            weapon.Initialize();
-        }
-    }
-
-    public PlayerWeapon GetWeapon(string weaponId)
-    {
-        if (_playerWeapons.ContainsKey(weaponId))
-        {
-            return _playerWeapons[weaponId];
+            foreach (PlayerWeapon weapon in GetComponents<PlayerWeapon>())
+            {
+                if (weapon)
+                {
+                    AddWeapon(weapon);
+                }
+            }
         }
 
-        return null;
-    }
-
-    public float GetWeaponModifier(WeaponModifiers weaponModifier) 
-    {
-        if (!_weaponModifiers.ContainsKey(weaponModifier))
+        public void SetWeaponModiferAmount(WeaponAttribute weaponModifier, float amount)
         {
-            return 0f;
+            _weaponModifiers[weaponModifier] = amount;
         }
 
-        return _weaponModifiers[weaponModifier];
+        public void IncreaseWeaponModifier(WeaponAttribute weaponModifier, float amount)
+        {
+            _weaponModifiers[weaponModifier] += amount;
+        }
+
+        public void AddWeapon(PlayerWeapon weapon)
+        {
+            if (_playerWeapons.Count < _maxWeaponsAllowed && !_playerWeapons.ContainsKey(weapon.WeaponData.WeaponID))
+            {
+                _playerWeapons.Add(weapon.WeaponData.WeaponID, weapon);
+                weapon.Initialize();
+            }
+        }
+
+        public PlayerWeapon GetWeapon(string weaponId)
+        {
+            if (_playerWeapons.ContainsKey(weaponId))
+            {
+                return _playerWeapons[weaponId];
+            }
+
+            return null;
+        }
+
+        public float GetWeaponModifier(WeaponAttribute weaponModifier)
+        {
+            if (!_weaponModifiers.ContainsKey(weaponModifier))
+            {
+                float defaultValue = 1;
+                if (weaponModifier == WeaponAttribute.NumberOfEnemiesCanPassThrough || weaponModifier == WeaponAttribute.NumberOfProjectiles)
+                {
+                    defaultValue = 0;
+                }
+
+                _weaponModifiers.Add(weaponModifier, defaultValue);
+            }
+
+            return _weaponModifiers[weaponModifier];
+        }
     }
 }

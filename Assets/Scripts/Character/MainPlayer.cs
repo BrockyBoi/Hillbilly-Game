@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Weaponry;
 using UnityEngine;
 
 [RequireComponent(typeof(MainPlayerMovementComponent))]
@@ -9,6 +10,7 @@ public class MainPlayer : Character
     public static MainPlayer Instance;
 
     PlayerArsenalComponent _arsenal;
+    public PlayerArsenalComponent ArsenalComponent { get { return _arsenal; } }
 
     protected override void Awake()
     {
@@ -20,9 +22,6 @@ public class MainPlayer : Character
 
     protected override void Update()
     {
-        if (!IsAlive())
-        {
-            Debug.Log("Dead");
-        }
+
     }
 }
