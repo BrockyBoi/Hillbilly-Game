@@ -31,11 +31,15 @@ namespace Weaponry
     [RequireComponent(typeof(BoxCollider2D))]
     public class Projectile : MonoBehaviour
     {
-        ProjectileData _projectileData;
-        int _numberOfEnemiesPassedThrough = 0;
-        Vector3 _direction = Vector3.zero;
+        protected ProjectileData _projectileData;
+        
+        private int _numberOfEnemiesPassedThrough = 0;
+        protected Vector3 _direction = Vector3.zero;
         WaitForSeconds _waitForTimeBetweenDamage;
         List<Enemy> _enemiesInContactWith = new List<Enemy>();
+
+        [SerializeField]
+        private float _maxDistanceFromPlayerBeforeDestroy = 1000f;
 
         IEnumerator _damageAllEnemiesInRange;
 
@@ -48,14 +52,26 @@ namespace Weaponry
         private void Update()
         {
             MoveProjectile();
+
+            float distanceFromPlayer = (transform.position - MainPlayer.Instance.transform.position).sqrMagnitude;
+            if (distanceFromPlayer > _maxDistanceFromPlayerBeforeDestroy)
+            {
+                Destroy(gameObject);
+            }
+        }
+
+        public void InitializeProjectile(ProjectileData projectileData)
+        {
+            this._projectileData = projectileData;
+            transform.localScale *= projectileData.ProjectileSizeMultiplier;
         }
 
         public void InitializeProjectile(ProjectileData projectileData, Vector3 direction)
         {
             direction.Normalize();
             _direction = direction;
-            this._projectileData = projectileData;
-            transform.localScale *= projectileData.ProjectileSizeMultiplier;
+
+            InitializeProjectile(projectileData);
         }
 
         protected virtual void MoveProjectile()
@@ -130,8 +146,11 @@ namespace Weaponry
 
             foreach (Enemy enemy in _enemiesInContactWith)
             {
-                EnemyHealthComponent healthComponent = enemy?.GetComponent<EnemyHealthComponent>();
-                healthComponent?.DoDamage(_projectileData.DamageToDeal);
+                if (enemy)
+                {
+                    EnemyHealthComponent healthComponent = enemy?.GetComponent<EnemyHealthComponent>();
+                    healthComponent?.DoDamage(_projectileData.DamageToDeal);
+                }
             }
         }
     }

@@ -16,7 +16,16 @@ namespace Weaponry
     {
         public string WeaponID;
         public float DefaultFireRate;
+
+        [Range(.05f, 20f)]
         public float MaxFireRate;
+
+        [Range(1, 10)]
+        public int NumberOfProjectilesToFire;
+        [Range(.05f, 1)]
+        public float TimeBetweenProjectiles;
+
+        public Projectile ProjectilePrefab;
 
         public ProjectileData DefaultProjectileData;
     }
@@ -25,23 +34,28 @@ namespace Weaponry
     {
         [Title("Weapon Properties")]
         [SerializeField]
-        protected WeaponData _weaponData;
-        public WeaponData WeaponData { get { return _weaponData; } }
+        protected WeaponScriptableObject _weaponScriptableObject;
+        public WeaponScriptableObject WeaponScriptableObject { get { return _weaponScriptableObject; } }
+        public WeaponData WeaponData { get { return _weaponScriptableObject.WeaponData; } }
 
-        Dictionary<WeaponAttribute, float> _weaponModifiers = new Dictionary<WeaponAttribute, float>();
-
-        [Title("Prefab")]
-        [SerializeField]
-        protected Projectile _projectilePrefab;
+        private Dictionary<WeaponAttribute, float> _weaponModifiers = new Dictionary<WeaponAttribute, float>();
 
         private WaitForSeconds _waitForNextFire;
+        protected WaitForSeconds _waitForInBetweenProjectiles;
 
         private MainPlayer _mainPlayer;
 
         public void Initialize()
         {
+            if (!_weaponScriptableObject)
+            {
+                Debug.LogError("Needs weapon scriptable object");
+                return;
+            }
+
             _mainPlayer = MainPlayer.Instance;
             _waitForNextFire = new WaitForSeconds(WeaponData.DefaultFireRate);
+            _waitForInBetweenProjectiles = new WaitForSeconds(WeaponData.TimeBetweenProjectiles);
             StartCoroutine(FireWeaponCoroutine());
         }
 
@@ -49,16 +63,9 @@ namespace Weaponry
         {
             while (_mainPlayer.IsAlive())
             {
-                yield return _waitForNextFire;
+                yield return _waitForNextFire;                
 
-                float weaponSpeed = WeaponData.DefaultProjectileData.ProjectileSpeed + GetWeaponModifier(WeaponAttribute.Speed);
-                float weaponSize = WeaponData.DefaultProjectileData.ProjectileSizeMultiplier + GetWeaponModifier(WeaponAttribute.Size);
-                float damageDealt = WeaponData.DefaultProjectileData.DamageToDeal + GetWeaponModifier(WeaponAttribute.Damage);
-                float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
-                float weaponDuration = WeaponData.DefaultProjectileData.WeaponDuration + GetWeaponModifier(WeaponAttribute.Duration);
-                int numberOfEnemiesToPassThrough = WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough + (int)GetWeaponModifier(WeaponAttribute.NumberOfEnemiesCanPassThrough);
-                bool canPassThroughUnlimitedEnemies = WeaponData.DefaultProjectileData.CanPassThroughUnlimitedEnemies;
-                FireWeapon(new ProjectileData(weaponSpeed, weaponSize, damageDealt, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies));
+                yield return FireWeapon(GetCurrentProjectileData());
             }
         }
 
@@ -66,10 +73,10 @@ namespace Weaponry
         {
             if (!_weaponModifiers.ContainsKey(weaponModifier))
             {
-                float defaultValue = 1;
-                if (weaponModifier == WeaponAttribute.NumberOfEnemiesCanPassThrough || weaponModifier == WeaponAttribute.NumberOfProjectiles)
+                float defaultValue = 0;
+                if (weaponModifier == WeaponAttribute.Size)
                 {
-                    defaultValue = 0;
+                    defaultValue = 1;
                 }
 
                 _weaponModifiers.Add(weaponModifier, defaultValue);
@@ -82,10 +89,10 @@ namespace Weaponry
         {
             if (!_weaponModifiers.ContainsKey(weaponModifier))
             {
-                float defaultValue = 1;
-                if (weaponModifier == WeaponAttribute.NumberOfEnemiesCanPassThrough || weaponModifier == WeaponAttribute.NumberOfProjectiles)
+                float defaultValue = 0;
+                if (weaponModifier == WeaponAttribute.Size)
                 {
-                    defaultValue = 0;
+                    defaultValue = 1;
                 }
 
                 _weaponModifiers.Add(weaponModifier, defaultValue);
@@ -113,6 +120,20 @@ namespace Weaponry
             }
         }
 
-        protected abstract void FireWeapon(ProjectileData projectileData);
+        protected ProjectileData GetCurrentProjectileData()
+        {
+            float weaponSpeed = WeaponData.DefaultProjectileData.ProjectileSpeed + GetWeaponModifier(WeaponAttribute.Speed);
+            float weaponSize = WeaponData.DefaultProjectileData.ProjectileSizeMultiplier + GetWeaponModifier(WeaponAttribute.Size);
+            float damageDealt = WeaponData.DefaultProjectileData.DamageToDeal + GetWeaponModifier(WeaponAttribute.Damage);
+            float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
+            float weaponDuration = WeaponData.DefaultProjectileData.WeaponDuration + GetWeaponModifier(WeaponAttribute.Duration);
+            int numberOfEnemiesToPassThrough = WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough + (int)GetWeaponModifier(WeaponAttribute.NumberOfEnemiesCanPassThrough);
+            bool canPassThroughUnlimitedEnemies = WeaponData.DefaultProjectileData.CanPassThroughUnlimitedEnemies;
+
+            ProjectileData projectileData = new ProjectileData(weaponSpeed, weaponSize, damageDealt, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies);
+            return projectileData;
+        }
+
+        protected abstract IEnumerator FireWeapon(ProjectileData projectileData);
     }
 }

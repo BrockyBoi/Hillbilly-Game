@@ -47,8 +47,6 @@ public class CharacterHealthComponent : MonoBehaviour
     protected virtual void Die()
     {
         OnKilled?.Invoke(GetOwningCharacter());
-
-        Destroy(gameObject);
     }
 
     public float GetCurrentHealth()

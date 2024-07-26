@@ -8,6 +8,8 @@ public class EnemyHealthComponent : CharacterHealthComponent
     {
         EnemySpawnerController.Instance.RemoveEnemyFromGame(GetOwningCharacter() as Enemy);
 
+        Destroy(gameObject);
+
         base.Die();
     }
 }

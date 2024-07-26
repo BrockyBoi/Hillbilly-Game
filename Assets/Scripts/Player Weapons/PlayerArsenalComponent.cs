@@ -36,7 +36,7 @@ namespace Weaponry
 
         public void AddWeapon(PlayerWeapon weapon)
         {
-            if (_playerWeapons.Count < _maxWeaponsAllowed && !_playerWeapons.ContainsKey(weapon.WeaponData.WeaponID))
+            if (_playerWeapons.Count < _maxWeaponsAllowed && weapon.WeaponScriptableObject && !_playerWeapons.ContainsKey(weapon.WeaponData.WeaponID))
             {
                 _playerWeapons.Add(weapon.WeaponData.WeaponID, weapon);
                 weapon.Initialize();
