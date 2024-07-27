@@ -15,7 +15,7 @@ namespace Weaponry
                 for (int i = 0; i < WeaponData.NumberOfProjectilesToFire; i++)
                 {
                     Projectile projectile = Instantiate<Projectile>(WeaponData.ProjectilePrefab, MainPlayer.Instance.transform.position, Quaternion.identity);
-                    projectile.InitializeProjectile(data, closestEnemy.transform.position - MainPlayer.Instance.transform.position);
+                    projectile.InitializeProjectile(this, data, closestEnemy.transform.position - MainPlayer.Instance.transform.position);
                 }
 
                 yield return _waitForInBetweenProjectiles;

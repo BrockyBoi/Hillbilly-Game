@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XP;
 
 namespace Weaponry
 {
@@ -28,6 +29,8 @@ namespace Weaponry
         public Projectile ProjectilePrefab;
 
         public ProjectileData DefaultProjectileData;
+
+        public List<WeaponUpgradeData> WeaponUpgrades;
     }
 
     public abstract class PlayerWeapon : MonoBehaviour

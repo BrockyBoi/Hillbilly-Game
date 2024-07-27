@@ -17,9 +17,9 @@ namespace Weaponry
             transform.position = MainPlayer.Instance.transform.position + (new Vector3(Mathf.Cos(spawnRadians + _totalTime), Mathf.Sin(spawnRadians + _totalTime)) * _projectileData.ProjectileSizeMultiplier);
         }
 
-        public void InitializeProjectile(ProjectileData projectileData, int index, int totalProjectiles)
+        public void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData, int index, int totalProjectiles)
         {
-            InitializeProjectile(projectileData);
+            InitializeProjectile(weapon, projectileData);
 
             _projectileIndex = index;
             _totalProjectiles = totalProjectiles;

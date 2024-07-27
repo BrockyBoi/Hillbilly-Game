@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Weaponry;
 using UnityEngine;
+using XP;
 
 [RequireComponent(typeof(MainPlayerMovementComponent))]
-[RequireComponent (typeof(PlayerArsenalComponent))]
+[RequireComponent(typeof(PlayerArsenalComponent))]
+[RequireComponent(typeof(PlayerXPComponent))]
 public class MainPlayer : Character
 {
     public static MainPlayer Instance;

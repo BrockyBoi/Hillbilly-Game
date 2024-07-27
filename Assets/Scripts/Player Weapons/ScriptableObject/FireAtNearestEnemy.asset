@@ -27,3 +27,8 @@ MonoBehaviour:
       WeaponDuration: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 0
+    WeaponUpgrades:
+    - WeaponAttributes: 0100000000000000
+      AttributeAmounts:
+      - 1
+      - 0.2

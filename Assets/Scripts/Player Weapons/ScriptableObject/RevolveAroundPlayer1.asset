@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: RevolveAroundPlayer1
   m_EditorClassIdentifier: 
   WeaponData:
-    WeaponID: NearestEnemy1
+    WeaponID: RevovleAroundPlayer
     DefaultFireRate: 1
-    MaxFireRate: 0.1
-    NumberOfProjectilesToFire: 2
+    MaxFireRate: 1
+    NumberOfProjectilesToFire: 4
     TimeBetweenProjectiles: 0.2
-    ProjectilePrefab: {fileID: 0}
+    ProjectilePrefab: {fileID: 5747068098198418808, guid: fa96480227d298a42b5ba52e39802fda, type: 3}
     DefaultProjectileData:
-      ProjectileSpeed: 5
-      ProjectileSizeMultiplier: 1
+      ProjectileSpeed: 1
+      ProjectileSizeMultiplier: 2
       DamageToDeal: 10
       TimeBetweenDamage: 0
-      WeaponDuration: 0
+      WeaponDuration: 10
       NumberOfEnemiesCanPassThrough: 0
-      CanPassThroughUnlimitedEnemies: 0
+      CanPassThroughUnlimitedEnemies: 1

@@ -23,6 +23,11 @@ public class CharacterHealthComponent : MonoBehaviour
 
     }
 
+    public bool DoesDamageKill(float damage)
+    {
+        return _currentHealth <= damage;
+    }
+
     public void AddHealth(float healthToAdd)
     {
         if (healthToAdd > 0)

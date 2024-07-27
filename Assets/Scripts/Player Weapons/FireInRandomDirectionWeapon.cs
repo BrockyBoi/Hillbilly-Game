@@ -16,7 +16,7 @@ namespace Weaponry
                 Vector3 dir = (randomLocation + Random.insideUnitSphere) - MainPlayer.Instance.transform.position;
                 dir.Normalize();
 
-                projectile.InitializeProjectile(data, dir);
+                projectile.InitializeProjectile(this, data, dir);
 
                 yield return _waitForInBetweenProjectiles;
             }

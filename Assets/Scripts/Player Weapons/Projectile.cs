@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XP;
 
 namespace Weaponry
 {
@@ -32,6 +33,7 @@ namespace Weaponry
     public class Projectile : MonoBehaviour
     {
         protected ProjectileData _projectileData;
+        protected PlayerWeapon _weapon;
         
         private int _numberOfEnemiesPassedThrough = 0;
         protected Vector3 _direction = Vector3.zero;
@@ -60,18 +62,19 @@ namespace Weaponry
             }
         }
 
-        public void InitializeProjectile(ProjectileData projectileData)
+        public void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData)
         {
-            this._projectileData = projectileData;
+            _weapon = weapon;
+            _projectileData = projectileData;
             transform.localScale *= projectileData.ProjectileSizeMultiplier;
         }
 
-        public void InitializeProjectile(ProjectileData projectileData, Vector3 direction)
+        public void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData, Vector3 direction)
         {
             direction.Normalize();
             _direction = direction;
 
-            InitializeProjectile(projectileData);
+            InitializeProjectile(weapon, projectileData);
         }
 
         protected virtual void MoveProjectile()
@@ -87,7 +90,16 @@ namespace Weaponry
                 if (enemy)
                 {
                     EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
-                    healthComponent?.DoDamage(_projectileData.DamageToDeal);
+                    if (healthComponent)
+                    {
+                        bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
+                        healthComponent.DoDamage(_projectileData.DamageToDeal);
+
+                        if (killsEnemy)
+                        {
+                            AddWeaponXP(enemy);
+                        }
+                    }
 
                     if (!_projectileData.CanPassThroughUnlimitedEnemies)
                     {
@@ -109,6 +121,19 @@ namespace Weaponry
                             StartCoroutine(_damageAllEnemiesInRange);
                         }
                     }
+                }
+            }
+        }
+
+        private void AddWeaponXP(Enemy enemy)
+        {
+            if (enemy && _weapon)
+            {
+                EnemyXPComponent enemyXP = enemy.GetComponent<EnemyXPComponent>();
+                WeaponXPComponent weaponXP = _weapon.GetComponent<WeaponXPComponent>();
+                if (enemyXP && weaponXP)
+                {
+                    weaponXP.AddXP(enemyXP.XpToGiveOnKill);
                 }
             }
         }

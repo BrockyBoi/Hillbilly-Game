@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XP;
 
 [RequireComponent(typeof(EnemyAttackableComponent))]
 [RequireComponent(typeof(EnemyMovementComponent))]
 [RequireComponent(typeof(EnemyHealthComponent))]
+[RequireComponent(typeof(EnemyXPComponent))]
 public class Enemy : Character
 {
     private EnemyAttackableComponent _attackableComponent;

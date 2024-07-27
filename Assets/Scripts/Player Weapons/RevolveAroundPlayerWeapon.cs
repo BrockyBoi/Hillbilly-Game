@@ -20,7 +20,7 @@ namespace Weaponry
                     Debug.LogError("Should be Revolve Around Player Weapon");
                     yield break;
                 }
-                projectile.InitializeProjectile(projectileData, i, WeaponData.NumberOfProjectilesToFire);
+                projectile.InitializeProjectile(this, projectileData, i, WeaponData.NumberOfProjectilesToFire);
                 _projectilesSpawned.Add(projectile);
             }
 
