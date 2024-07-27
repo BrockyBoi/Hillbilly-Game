@@ -7,9 +7,9 @@ using XP;
 
 namespace Weaponry
 {
-    public enum WeaponAttribute
+    public enum UpgradeAttribute
     {
-        Speed, NumberOfProjectiles, Size, FireRate, NumberOfEnemiesCanPassThrough, Damage, Duration
+        ProjectileSpeed, NumberOfProjectiles, Size, FireRate, NumberOfEnemiesCanPassThrough, Damage, Duration, PickupRange, MovementSpeed
     }
 
     [Serializable]
@@ -33,15 +33,19 @@ namespace Weaponry
         public List<WeaponUpgradeData> WeaponUpgrades;
     }
 
+    [RequireComponent(typeof(WeaponXPComponent))]
     public abstract class PlayerWeapon : MonoBehaviour
     {
         [Title("Weapon Properties")]
         [SerializeField]
         protected WeaponScriptableObject _weaponScriptableObject;
         public WeaponScriptableObject WeaponScriptableObject { get { return _weaponScriptableObject; } }
+
+        protected WeaponXPComponent _weaponXPComponent;
+        public WeaponXPComponent WeaponXPComponent { get { return _weaponXPComponent; } }
         public WeaponData WeaponData { get { return _weaponScriptableObject.WeaponData; } }
 
-        private Dictionary<WeaponAttribute, float> _weaponModifiers = new Dictionary<WeaponAttribute, float>();
+        private Dictionary<UpgradeAttribute, float> _weaponModifiers = new Dictionary<UpgradeAttribute, float>();
 
         private WaitForSeconds _waitForNextFire;
         protected WaitForSeconds _waitForInBetweenProjectiles;
@@ -59,6 +63,8 @@ namespace Weaponry
             _mainPlayer = MainPlayer.Instance;
             _waitForNextFire = new WaitForSeconds(WeaponData.DefaultFireRate);
             _waitForInBetweenProjectiles = new WaitForSeconds(WeaponData.TimeBetweenProjectiles);
+            _weaponXPComponent = GetComponent<WeaponXPComponent>();
+            _weaponXPComponent.InitializeWeapon(this);
             StartCoroutine(FireWeaponCoroutine());
         }
 
@@ -72,12 +78,12 @@ namespace Weaponry
             }
         }
 
-        protected float GetWeaponModifier(WeaponAttribute weaponModifier)
+        protected float GetWeaponModifier(UpgradeAttribute weaponModifier)
         {
             if (!_weaponModifiers.ContainsKey(weaponModifier))
             {
                 float defaultValue = 0;
-                if (weaponModifier == WeaponAttribute.Size)
+                if (weaponModifier == UpgradeAttribute.Size)
                 {
                     defaultValue = 1;
                 }
@@ -85,15 +91,15 @@ namespace Weaponry
                 _weaponModifiers.Add(weaponModifier, defaultValue);
             }
 
-            return _weaponModifiers[weaponModifier] + _mainPlayer.ArsenalComponent.GetWeaponModifier(weaponModifier);
+            return _weaponModifiers[weaponModifier] + _mainPlayer.AttributesComponent.GetAttribute(weaponModifier);
         }
 
-        protected void SetWeaponModifier(WeaponAttribute weaponModifier, float newValue)
+        protected void SetWeaponModifier(UpgradeAttribute weaponModifier, float newValue)
         {
             if (!_weaponModifiers.ContainsKey(weaponModifier))
             {
                 float defaultValue = 0;
-                if (weaponModifier == WeaponAttribute.Size)
+                if (weaponModifier == UpgradeAttribute.Size)
                 {
                     defaultValue = 1;
                 }
@@ -104,14 +110,14 @@ namespace Weaponry
             _weaponModifiers[weaponModifier] = newValue;
         }
 
-        public void ModifyWeapon(WeaponAttribute modifier, float changeAmount)
+        public void ModifyWeapon(UpgradeAttribute modifier, float changeAmount)
         {
             switch (modifier)
             {
-                case WeaponAttribute.FireRate:
+                case UpgradeAttribute.FireRate:
                     {
                         SetWeaponModifier(modifier, GetWeaponModifier(modifier) - changeAmount);
-                        _waitForNextFire = new WaitForSeconds(Mathf.Clamp(WeaponData.DefaultFireRate - GetWeaponModifier(WeaponAttribute.FireRate), WeaponData.MaxFireRate, WeaponData.DefaultFireRate));
+                        _waitForNextFire = new WaitForSeconds(Mathf.Clamp(WeaponData.DefaultFireRate - GetWeaponModifier(UpgradeAttribute.FireRate), WeaponData.MaxFireRate, WeaponData.DefaultFireRate));
                         break;
                     }
 
@@ -125,12 +131,12 @@ namespace Weaponry
 
         protected ProjectileData GetCurrentProjectileData()
         {
-            float weaponSpeed = WeaponData.DefaultProjectileData.ProjectileSpeed + GetWeaponModifier(WeaponAttribute.Speed);
-            float weaponSize = WeaponData.DefaultProjectileData.ProjectileSizeMultiplier + GetWeaponModifier(WeaponAttribute.Size);
-            float damageDealt = WeaponData.DefaultProjectileData.DamageToDeal + GetWeaponModifier(WeaponAttribute.Damage);
+            float weaponSpeed = WeaponData.DefaultProjectileData.ProjectileSpeed + GetWeaponModifier(UpgradeAttribute.ProjectileSpeed);
+            float weaponSize = WeaponData.DefaultProjectileData.ProjectileSizeMultiplier + GetWeaponModifier(UpgradeAttribute.Size);
+            float damageDealt = WeaponData.DefaultProjectileData.DamageToDeal + GetWeaponModifier(UpgradeAttribute.Damage);
             float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
-            float weaponDuration = WeaponData.DefaultProjectileData.WeaponDuration + GetWeaponModifier(WeaponAttribute.Duration);
-            int numberOfEnemiesToPassThrough = WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough + (int)GetWeaponModifier(WeaponAttribute.NumberOfEnemiesCanPassThrough);
+            float weaponDuration = WeaponData.DefaultProjectileData.WeaponDuration + GetWeaponModifier(UpgradeAttribute.Duration);
+            int numberOfEnemiesToPassThrough = WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough + (int)GetWeaponModifier(UpgradeAttribute.NumberOfEnemiesCanPassThrough);
             bool canPassThroughUnlimitedEnemies = WeaponData.DefaultProjectileData.CanPassThroughUnlimitedEnemies;
 
             ProjectileData projectileData = new ProjectileData(weaponSpeed, weaponSize, damageDealt, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies);

@@ -8,7 +8,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     [SerializeField]
     protected float _movementSpeed = 5f;
 
-    private Character _owningCharacter;
+    protected Character _owningCharacter;
 
     private void Awake()
     {

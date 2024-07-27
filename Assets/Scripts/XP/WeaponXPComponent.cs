@@ -9,7 +9,7 @@ namespace XP
     [Serializable]
     public struct WeaponUpgradeData
     {
-        public List<WeaponAttribute> WeaponAttributes;
+        public List<UpgradeAttribute> WeaponAttributes;
         public List<float> AttributeAmounts;
     }
 

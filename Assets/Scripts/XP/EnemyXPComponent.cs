@@ -7,7 +7,7 @@ namespace XP
     public class EnemyXPComponent : MonoBehaviour
     {
         [SerializeField]
-        private float _xpToGiveOnKill;
-        public float XpToGiveOnKill { get { return _xpToGiveOnKill; } }
+        private int _xpToGiveOnKill;
+        public int XpToGiveOnKill { get { return _xpToGiveOnKill; } }
     }
 }

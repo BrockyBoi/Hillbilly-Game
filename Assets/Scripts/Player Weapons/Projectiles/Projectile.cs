@@ -30,7 +30,8 @@ namespace Weaponry
     }
 
     [RequireComponent(typeof(BoxCollider2D))]
-    public class Projectile : MonoBehaviour
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class Projectile : MonoBehaviour, IPoolableObject
     {
         protected ProjectileData _projectileData;
         protected PlayerWeapon _weapon;
@@ -40,16 +41,24 @@ namespace Weaponry
         WaitForSeconds _waitForTimeBetweenDamage;
         List<Enemy> _enemiesInContactWith = new List<Enemy>();
 
+        private SpriteRenderer _spriteRenderer;
+        private BoxCollider2D _boxCollider;
+
         [SerializeField]
-        private float _maxDistanceFromPlayerBeforeDestroy = 1000f;
+        private float _maxDistanceFromPlayerBeforeDestroy = 15;
 
         IEnumerator _damageAllEnemiesInRange;
+
+        private void Awake()
+        {
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _boxCollider = GetComponent<BoxCollider2D>();
+        }
 
         private void Start()
         {
             _damageAllEnemiesInRange = DamageAllEnemiesInRange();
         }
-
 
         private void Update()
         {
@@ -58,7 +67,7 @@ namespace Weaponry
             float distanceFromPlayer = (transform.position - MainPlayer.Instance.transform.position).sqrMagnitude;
             if (distanceFromPlayer > _maxDistanceFromPlayerBeforeDestroy)
             {
-                Destroy(gameObject);
+                PoolableObjectsManager.Instance.AddObjectToPool(this, ObjectPoolTypes.Projectile);
             }
         }
 
@@ -97,7 +106,7 @@ namespace Weaponry
 
                         if (killsEnemy)
                         {
-                            AddWeaponXP(enemy);
+                            AddXP(enemy);
                         }
                     }
 
@@ -125,7 +134,7 @@ namespace Weaponry
             }
         }
 
-        private void AddWeaponXP(Enemy enemy)
+        private void AddXP(Enemy enemy)
         {
             if (enemy && _weapon)
             {
@@ -177,6 +186,13 @@ namespace Weaponry
                     healthComponent?.DoDamage(_projectileData.DamageToDeal);
                 }
             }
+        }
+
+        public void ActivateObject(bool shouldActivate)
+        {
+            _boxCollider.enabled = shouldActivate;
+            _spriteRenderer.enabled = shouldActivate;
+            gameObject.SetActive(true);
         }
     }
 }

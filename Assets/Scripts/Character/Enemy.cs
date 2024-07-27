@@ -7,15 +7,18 @@ using XP;
 [RequireComponent(typeof(EnemyMovementComponent))]
 [RequireComponent(typeof(EnemyHealthComponent))]
 [RequireComponent(typeof(EnemyXPComponent))]
-public class Enemy : Character
+public class Enemy : Character, IPoolableObject 
 {
     private EnemyAttackableComponent _attackableComponent;
+    private EnemyXPComponent _xpComponent;
+    public EnemyXPComponent XPComponent { get { return _xpComponent; } }
 
     protected override void Awake()
     {
         base.Awake();
 
-        _attackableComponent = GetComponent<EnemyAttackableComponent>(); 
+        _attackableComponent = GetComponent<EnemyAttackableComponent>();
+        _xpComponent = GetComponent<EnemyXPComponent>();
     }
 
     #region Collisions
@@ -51,4 +54,11 @@ public class Enemy : Character
         }
     }
     #endregion
+
+    public void ActivateObject(bool shouldActivate)
+    {
+        gameObject.SetActive(shouldActivate);
+        _spriteRenderer.enabled = shouldActivate;
+        _boxCollider.enabled = shouldActivate;
+    }
 }

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 430653098388533055}
   - component: {fileID: 5907366943672505765}
   - component: {fileID: 6152265290038473368}
+  - component: {fileID: 6638543014061300538}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -128,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d4860d81cf3ff74a91de34335655976, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movementSpeed: 7
+  _movementSpeed: 2
 --- !u!61 &430653098388533055
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -214,3 +215,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &6638543014061300538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809142628805603757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb097aaaaef6d494d85d074a377cee12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _xpToGiveOnKill: 5

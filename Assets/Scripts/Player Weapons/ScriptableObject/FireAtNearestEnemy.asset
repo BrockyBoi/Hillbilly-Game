@@ -14,15 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: NearestEnemy1
-    DefaultFireRate: 1
+    DefaultFireRate: 1.5
     MaxFireRate: 0.1
-    NumberOfProjectilesToFire: 2
+    NumberOfProjectilesToFire: 1
     TimeBetweenProjectiles: 0.2
-    ProjectilePrefab: {fileID: 0}
+    ProjectilePrefab: {fileID: 5970115702615538014, guid: 22173777cf11f3f4c8f99dbcabf0fba2, type: 3}
     DefaultProjectileData:
-      ProjectileSpeed: 5
+      ProjectileSpeed: 2
       ProjectileSizeMultiplier: 1
-      DamageToDeal: 10
+      DamageToDeal: 45
       TimeBetweenDamage: 0
       WeaponDuration: 0
       NumberOfEnemiesCanPassThrough: 0
@@ -32,3 +32,18 @@ MonoBehaviour:
       AttributeAmounts:
       - 1
       - 0.2
+    - WeaponAttributes: 0000000003000000
+      AttributeAmounts:
+      - 0.5
+      - 0.2
+    - WeaponAttributes: 0100000005000000
+      AttributeAmounts:
+      - 1
+      - 10
+    - WeaponAttributes: 02000000
+      AttributeAmounts:
+      - 2
+    - WeaponAttributes: 0300000000000000
+      AttributeAmounts:
+      - 1
+      - 1

@@ -4,18 +4,21 @@ using UnityEngine;
 
 namespace Weaponry
 {
-    public class PlayerArsenalComponent : MonoBehaviour
+    public class PlayerAttributesComponent : MonoBehaviour
     {
         [SerializeField]
         int _maxWeaponsAllowed = 5;
 
         Dictionary<string, PlayerWeapon> _playerWeapons = new Dictionary<string, PlayerWeapon>();
 
-        Dictionary<WeaponAttribute, float> _weaponModifiers = new Dictionary<WeaponAttribute, float>();
+        Dictionary<UpgradeAttribute, float> _attributes = new Dictionary<UpgradeAttribute, float>();
+
+        public delegate void EOnAttributeChange(UpgradeAttribute attribute, float value);
+        public event EOnAttributeChange OnAttributeChanged;
 
         private void Start()
         {
-            foreach (PlayerWeapon weapon in GetComponents<PlayerWeapon>())
+            foreach (PlayerWeapon weapon in GetComponentsInChildren<PlayerWeapon>())
             {
                 if (weapon)
                 {
@@ -24,14 +27,14 @@ namespace Weaponry
             }
         }
 
-        public void SetWeaponModiferAmount(WeaponAttribute weaponModifier, float amount)
+        public void SetAttributeValue(UpgradeAttribute weaponModifier, float amount)
         {
-            _weaponModifiers[weaponModifier] = amount;
+            _attributes[weaponModifier] = amount;
         }
 
-        public void IncreaseWeaponModifier(WeaponAttribute weaponModifier, float amount)
+        public void IncreaseAttributeValue(UpgradeAttribute weaponModifier, float amount)
         {
-            _weaponModifiers[weaponModifier] += amount;
+            _attributes[weaponModifier] += amount;
         }
 
         public void AddWeapon(PlayerWeapon weapon)
@@ -53,20 +56,20 @@ namespace Weaponry
             return null;
         }
 
-        public float GetWeaponModifier(WeaponAttribute weaponModifier)
+        public float GetAttribute(UpgradeAttribute attribute)
         {
-            if (!_weaponModifiers.ContainsKey(weaponModifier))
+            if (!_attributes.ContainsKey(attribute))
             {
                 float defaultValue = 1;
-                if (weaponModifier == WeaponAttribute.NumberOfEnemiesCanPassThrough || weaponModifier == WeaponAttribute.NumberOfProjectiles)
+                if (attribute == UpgradeAttribute.NumberOfEnemiesCanPassThrough || attribute == UpgradeAttribute.NumberOfProjectiles)
                 {
                     defaultValue = 0;
                 }
 
-                _weaponModifiers.Add(weaponModifier, defaultValue);
+                _attributes.Add(attribute, defaultValue);
             }
 
-            return _weaponModifiers[weaponModifier];
+            return _attributes[attribute];
         }
     }
 }

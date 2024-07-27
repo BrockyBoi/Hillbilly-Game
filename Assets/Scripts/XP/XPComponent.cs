@@ -17,10 +17,11 @@ namespace XP
 
         public virtual void AddXP(float xp)
         {
+            Debug.Log("Adding " + xp + "xp");
             _currentXP += xp;
 
             float xpNeeded = GetXPNeeded();
-            while (_currentXP > xpNeeded)
+            while (_currentXP > xpNeeded && xpNeeded > 0)
             {
                 _currentXP -= xpNeeded;
                 LevelUp();
@@ -30,11 +31,18 @@ namespace XP
         protected virtual void LevelUp()
         {
             _currentLevel = Mathf.Clamp(_currentLevel + 1, 0, _xpNeededPerLevel.Count - 1);
+            Debug.Log("Leveld up to " + _currentLevel + " level");
         }
 
         public float GetXPNeeded()
         {
-            return _xpNeededPerLevel[_currentLevel];
+            if (_currentLevel < _xpNeededPerLevel.Count && _xpNeededPerLevel.Count > 0)
+            {
+                return _xpNeededPerLevel[_currentLevel];
+
+            }
+
+            return -1;
         }
     }
 }

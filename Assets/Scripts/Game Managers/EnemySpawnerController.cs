@@ -9,10 +9,6 @@ public class EnemySpawnerController : MonoBehaviour
 
     private float _currentSpawnFrequency;
 
-    [Title("Prefabs")]
-    [Required, SerializeField]
-    private Enemy _enemyToSpawn;
-
     [Title("Spawn Parameters")]
     [SerializeField]
     private float _maxSpawnRate = .5f;
@@ -20,12 +16,7 @@ public class EnemySpawnerController : MonoBehaviour
     [SerializeField]
     private float _startingSpawnFrequency = 2.5f;
 
-    [Title("Difficulty")]
-    [SerializeField]
-    private float _timeBetweenDifficultyChange = 15f;
-
-    [SerializeField]
-    private float _timeToTakeOffOfSpawnFrequency = .3f;
+    private float _nextSpawnInterval = -1;
 
     [Title("Spawn Location")]
     [SerializeField]
@@ -35,7 +26,6 @@ public class EnemySpawnerController : MonoBehaviour
     private float _maxDistanceSpawnedFromPlayer = 50;
 
     WaitForSeconds _waitToSpawnEnemy;
-    WaitForSeconds _waitToChangeDifficulty;
 
     private List<Enemy> _enemiesInGame = new List<Enemy>();
     public List<Enemy> EnemiesInGame { get { return _enemiesInGame; } }
@@ -51,7 +41,6 @@ public class EnemySpawnerController : MonoBehaviour
         _currentSpawnFrequency = _startingSpawnFrequency;
 
         _waitToSpawnEnemy = new WaitForSeconds(_currentSpawnFrequency);
-        _waitToChangeDifficulty = new WaitForSeconds(_timeBetweenDifficultyChange);
 
 
         StartMatch();
@@ -64,10 +53,14 @@ public class EnemySpawnerController : MonoBehaviour
 
     }
 
+    public void SetSpawnInterval(float spawnInterval)
+    {
+        _nextSpawnInterval = Mathf.Clamp(spawnInterval, _maxSpawnRate, _startingSpawnFrequency);
+    }
+
     void StartMatch()
     {
         StartCoroutine(HandleEnemySpawn());
-        StartCoroutine(HandleSpawnRateIncrease());
     }
 
     IEnumerator HandleEnemySpawn()
@@ -76,21 +69,14 @@ public class EnemySpawnerController : MonoBehaviour
         {
             SpawnEnemy();
 
+            if (_nextSpawnInterval != -1)
+            {
+                _waitToSpawnEnemy = new WaitForSeconds(_nextSpawnInterval);
+                _nextSpawnInterval = -1;
+            }
             yield return _waitToSpawnEnemy;
         }
     }
-
-    IEnumerator HandleSpawnRateIncrease()
-    {
-        while (GameManager.Instance.CanGameContinue())
-        {
-            yield return _waitToChangeDifficulty;
-
-            _currentSpawnFrequency = Mathf.Clamp(_currentSpawnFrequency - _timeToTakeOffOfSpawnFrequency, _maxSpawnRate, _startingSpawnFrequency);
-            _waitToSpawnEnemy = new WaitForSeconds(_currentSpawnFrequency);
-        }
-    }
-
 
     private void SpawnEnemy()
     {
@@ -101,11 +87,15 @@ public class EnemySpawnerController : MonoBehaviour
         dirVector.Normalize();
 
         Vector2 spawnPos = playerPos + (dirVector * Random.Range(_minDistanceSpawnedFromPlayer, _maxDistanceSpawnedFromPlayer));
-        Enemy enemy = Instantiate<Enemy>(_enemyToSpawn, spawnPos, Quaternion.identity);
-        _enemiesInGame.Add(enemy);
+        Enemy enemy = PoolableObjectsManager.Instance.GetPoolableObject(ObjectPoolTypes.Enemy) as Enemy;
+        if (enemy)
+        {
+            enemy.transform.position = spawnPos;
+            _enemiesInGame.Add(enemy);
 
-        enemy.HealthComponent.OnKilled -= RemoveEnemyFromGame;
-        enemy.HealthComponent.OnKilled += RemoveEnemyFromGame;
+            enemy.HealthComponent.OnKilled -= RemoveEnemyFromGame;
+            enemy.HealthComponent.OnKilled += RemoveEnemyFromGame;
+        }
     }
 
     public void RemoveEnemyFromGame(Character enemyKilled)

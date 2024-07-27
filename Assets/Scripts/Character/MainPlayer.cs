@@ -5,25 +5,65 @@ using UnityEngine;
 using XP;
 
 [RequireComponent(typeof(MainPlayerMovementComponent))]
-[RequireComponent(typeof(PlayerArsenalComponent))]
+[RequireComponent(typeof(PlayerAttributesComponent))]
 [RequireComponent(typeof(PlayerXPComponent))]
+[RequireComponent(typeof(CircleCollider2D))]
 public class MainPlayer : Character
 {
     public static MainPlayer Instance;
 
-    PlayerArsenalComponent _arsenal;
-    public PlayerArsenalComponent ArsenalComponent { get { return _arsenal; } }
+    private PlayerAttributesComponent _attributes;
+    public PlayerAttributesComponent AttributesComponent { get { return _attributes; } }
+
+    private PlayerXPComponent _playerXP;
+    public PlayerXPComponent PlayerXPComponent { get { return _playerXP; } }
+
+    private CircleCollider2D _xpOrbCollider;
+
+    float _startingXPOrbColliderRadius;
 
     protected override void Awake()
     {
         base.Awake();
 
         Instance = this;
-        _arsenal = GetComponent<PlayerArsenalComponent>();
+        _attributes = GetComponent<PlayerAttributesComponent>();
+        _playerXP = GetComponent<PlayerXPComponent>();
+        _xpOrbCollider = GetComponent<CircleCollider2D>();
     }
 
-    protected override void Update()
+    private void OnEnable()
     {
+        AttributesComponent.OnAttributeChanged -= OnAttributeChanged;
+        AttributesComponent.OnAttributeChanged += OnAttributeChanged;
+    }
 
+    private void OnDisable()
+    {
+        AttributesComponent.OnAttributeChanged -= OnAttributeChanged;
+    }
+
+    private void Start()
+    {
+        _startingXPOrbColliderRadius = _xpOrbCollider.radius;
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D other)
+    {
+        base.OnTriggerEnter2D(other);
+
+        XPOrb orb = other.gameObject.GetComponent<XPOrb>();
+        if (orb)
+        {
+            orb.OnEnterPlayerPickupRange();
+        }
+    }
+
+    private void OnAttributeChanged(UpgradeAttribute attribute, float value)
+    {
+        if (attribute == UpgradeAttribute.PickupRange)
+        {
+            _xpOrbCollider.radius = _startingXPOrbColliderRadius * value;
+        }
     }
 }
