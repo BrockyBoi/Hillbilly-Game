@@ -30,6 +30,12 @@ public class EnemySpawnerController : MonoBehaviour
     private List<Enemy> _enemiesInGame = new List<Enemy>();
     public List<Enemy> EnemiesInGame { get { return _enemiesInGame; } }
 
+    [SerializeField]
+    private GameObject _enemyPrefab;
+
+    private PoolableObjectsComponent<Enemy> _enemyPool = new PoolableObjectsComponent<Enemy>();
+    public PoolableObjectsComponent<Enemy> EnemyPool { get { return _enemyPool; } }
+
     private void Awake()
     {
         Instance = this;
@@ -41,6 +47,7 @@ public class EnemySpawnerController : MonoBehaviour
         _currentSpawnFrequency = _startingSpawnFrequency;
 
         _waitToSpawnEnemy = new WaitForSeconds(_currentSpawnFrequency);
+        _enemyPool.Initialize(_enemyPrefab);
 
 
         StartMatch();
@@ -67,6 +74,7 @@ public class EnemySpawnerController : MonoBehaviour
     {
         while (GameManager.Instance.CanGameContinue())
         {
+            Debug.Log("Spawn enemy");
             SpawnEnemy();
 
             if (_nextSpawnInterval != -1)
@@ -87,7 +95,7 @@ public class EnemySpawnerController : MonoBehaviour
         dirVector.Normalize();
 
         Vector2 spawnPos = playerPos + (dirVector * Random.Range(_minDistanceSpawnedFromPlayer, _maxDistanceSpawnedFromPlayer));
-        Enemy enemy = PoolableObjectsManager.Instance.GetPoolableObject(ObjectPoolTypes.Enemy) as Enemy;
+        Enemy enemy = _enemyPool.GetPoolableObject();
         if (enemy)
         {
             enemy.transform.position = spawnPos;

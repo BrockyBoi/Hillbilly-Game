@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Weaponry
 {
-    public class RevolveAroundPlayerProjectile : Projectile
+    public class RevolveAroundPlayerProjectile : BaseProjectile
     {
         int _projectileIndex = 0;
         int _totalProjectiles = 0;

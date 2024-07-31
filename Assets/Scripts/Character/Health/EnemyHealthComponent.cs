@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using XP;
 
 public class EnemyHealthComponent : CharacterHealthComponent
 {
@@ -11,9 +12,9 @@ public class EnemyHealthComponent : CharacterHealthComponent
         {
             EnemySpawnerController.Instance.RemoveEnemyFromGame(enemy);
 
-            PoolableObjectsManager.Instance.AddObjectToPool(enemy, ObjectPoolTypes.Enemy);
+            EnemySpawnerController.Instance.EnemyPool.AddObjectToPool(enemy);
 
-            XPOrb xPOrb = PoolableObjectsManager.Instance.GetPoolableObject(ObjectPoolTypes.XPOrb) as XPOrb;
+            XPOrb xPOrb = XPPoolManager.Instance.XPOrbPool.GetPoolableObject(); ;
             if (xPOrb)
             {
                 xPOrb.transform.position = transform.position;

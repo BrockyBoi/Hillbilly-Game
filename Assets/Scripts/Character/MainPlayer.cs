@@ -5,15 +5,18 @@ using UnityEngine;
 using XP;
 
 [RequireComponent(typeof(MainPlayerMovementComponent))]
-[RequireComponent(typeof(PlayerAttributesComponent))]
+[RequireComponent(typeof(PlayerWeaponsComponent))]
 [RequireComponent(typeof(PlayerXPComponent))]
 [RequireComponent(typeof(CircleCollider2D))]
 public class MainPlayer : Character
 {
     public static MainPlayer Instance;
 
-    private PlayerAttributesComponent _attributes;
-    public PlayerAttributesComponent AttributesComponent { get { return _attributes; } }
+    private PlayerWeaponsComponent _weaponsComponent;
+    public PlayerWeaponsComponent WeaponsComponent { get { return _weaponsComponent; } }
+
+    private UpgradeAttributesComponent _upgradesAttributesComponent = new UpgradeAttributesComponent();
+    public UpgradeAttributesComponent UpgradeAttributesComponent { get { return _upgradesAttributesComponent; } }
 
     private PlayerXPComponent _playerXP;
     public PlayerXPComponent PlayerXPComponent { get { return _playerXP; } }
@@ -27,25 +30,26 @@ public class MainPlayer : Character
         base.Awake();
 
         Instance = this;
-        _attributes = GetComponent<PlayerAttributesComponent>();
+        _weaponsComponent = GetComponent<PlayerWeaponsComponent>();
         _playerXP = GetComponent<PlayerXPComponent>();
         _xpOrbCollider = GetComponent<CircleCollider2D>();
     }
 
     private void OnEnable()
     {
-        AttributesComponent.OnAttributeChanged -= OnAttributeChanged;
-        AttributesComponent.OnAttributeChanged += OnAttributeChanged;
+        UpgradeAttributesComponent.OnAttributeChanged -= OnAttributeChanged;
+        UpgradeAttributesComponent.OnAttributeChanged += OnAttributeChanged;
     }
 
     private void OnDisable()
     {
-        AttributesComponent.OnAttributeChanged -= OnAttributeChanged;
+        UpgradeAttributesComponent.OnAttributeChanged -= OnAttributeChanged;
     }
 
     private void Start()
     {
         _startingXPOrbColliderRadius = _xpOrbCollider.radius;
+        _upgradesAttributesComponent.SetAttribute(UpgradeAttribute.MovementSpeed, 1);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)

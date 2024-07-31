@@ -5,7 +5,9 @@ using UnityEngine;
 public class CharacterHealthComponent : MonoBehaviour
 {
     [SerializeField]
-    private float _maxHealth = 100f;
+    private float _defaultHealth = 100f;
+    public float DefaultHealth { get { return _defaultHealth; } }
+
     private float _currentHealth = 100;
 
     public delegate void EOnKilled(Character characterKilled);
@@ -14,7 +16,7 @@ public class CharacterHealthComponent : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _currentHealth = _maxHealth;
+        _currentHealth = _defaultHealth;
     }
 
     // Update is called once per frame
@@ -32,15 +34,20 @@ public class CharacterHealthComponent : MonoBehaviour
     {
         if (healthToAdd > 0)
         {
-            _currentHealth = Mathf.Clamp(_currentHealth + healthToAdd, 0, _maxHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth + healthToAdd, 0, _defaultHealth);
         }
+    }
+
+    public void SetHealth(float newHealth)
+    {
+        _currentHealth = newHealth;
     }
 
     public void DoDamage(float damage)
     {
         if (IsAlive() && damage > 0)
         {
-            _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _maxHealth);
+            _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _defaultHealth);
 
             if (_currentHealth <= 0 )
             {

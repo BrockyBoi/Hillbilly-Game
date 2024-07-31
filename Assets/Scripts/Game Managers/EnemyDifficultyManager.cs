@@ -73,5 +73,11 @@ public class EnemyDifficultyManager : MonoBehaviour
         _currentHealthMultiplier += _amountToIncreaseHealthMultiplier;
 
         EnemySpawnerController.Instance.SetSpawnInterval(_currentSpawnFrequency);
+        Debug.Log("New difficulty level " + _currentDifficultyLevel);
+    }
+
+    public int GetBonusXP()
+    {
+        return Mathf.RoundToInt(_currentDifficultyLevel * _xpAmountToIncreasePerLevel * MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier));
     }
 }

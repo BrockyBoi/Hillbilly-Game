@@ -9,15 +9,32 @@ namespace Weaponry
     [Serializable]
     public struct ProjectileData
     {
+        [Range(1, 10)]
         public float ProjectileSpeed;
+
+        [Range(1, 5)]
         public float ProjectileSizeMultiplier;
+
+        [Range(1, 1000)]
         public float DamageToDeal;
+
+        [Range(.1f, 1)]
         public float TimeBetweenDamage;
+
+        [Range(.2f, 10)]
         public float WeaponDuration;
+
+        [Range(0, 10)]
         public int NumberOfEnemiesCanPassThrough;
+
         public bool CanPassThroughUnlimitedEnemies;
 
-        public ProjectileData(float speed, float sizeMultiplier, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies)
+        [Range(0, 50)]
+        public int ProjectileArcCount;
+
+        public bool CanWeaponArc;
+
+        public ProjectileData(float speed, float sizeMultiplier, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount)
         {
             this.ProjectileSpeed = speed;
             this.ProjectileSizeMultiplier = sizeMultiplier;
@@ -26,12 +43,14 @@ namespace Weaponry
             this.TimeBetweenDamage = timeBetweenDamage;
             this.NumberOfEnemiesCanPassThrough = numberOfEnemiesToPassThrough;
             this.CanPassThroughUnlimitedEnemies = canPassThroughUnlimitedEnemies;
+            this.CanWeaponArc = canWeaponArc;
+            this.ProjectileArcCount = arcCount;
         }
     }
 
     [RequireComponent(typeof(BoxCollider2D))]
     [RequireComponent(typeof(SpriteRenderer))]
-    public class Projectile : MonoBehaviour, IPoolableObject
+    public class BaseProjectile : MonoBehaviour, IPoolableObject
     {
         protected ProjectileData _projectileData;
         protected PlayerWeapon _weapon;
@@ -47,7 +66,11 @@ namespace Weaponry
         [SerializeField]
         private float _maxDistanceFromPlayerBeforeDestroy = 15;
 
+        private Vector3 _initialScale = Vector3.zero;
+
         IEnumerator _damageAllEnemiesInRange;
+
+        protected bool _initialized = false;
 
         private void Awake()
         {
@@ -58,23 +81,37 @@ namespace Weaponry
         private void Start()
         {
             _damageAllEnemiesInRange = DamageAllEnemiesInRange();
+            _waitForTimeBetweenDamage = new WaitForSeconds(_projectileData.TimeBetweenDamage);
         }
 
         private void Update()
         {
-            MoveProjectile();
-
-            float distanceFromPlayer = (transform.position - MainPlayer.Instance.transform.position).sqrMagnitude;
-            if (distanceFromPlayer > _maxDistanceFromPlayerBeforeDestroy)
+            if (_initialized)
             {
-                PoolableObjectsManager.Instance.AddObjectToPool(this, ObjectPoolTypes.Projectile);
+                MoveProjectile();
+
+                float distanceFromPlayer = (transform.position - MainPlayer.Instance.transform.position).sqrMagnitude;
+                if (distanceFromPlayer > _maxDistanceFromPlayerBeforeDestroy)
+                {
+                    _weapon.ProjectilePool.AddObjectToPool(this);
+                }
             }
         }
 
         public void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData)
         {
+            _initialized = true;
             _weapon = weapon;
             _projectileData = projectileData;
+
+            _numberOfEnemiesPassedThrough = 0;
+
+            if (_initialScale == Vector3.zero)
+            {
+                _initialScale = transform.localScale;
+            }
+
+            transform.localScale = _initialScale;
             transform.localScale *= projectileData.ProjectileSizeMultiplier;
         }
 
@@ -116,7 +153,7 @@ namespace Weaponry
 
                         if (_numberOfEnemiesPassedThrough >= _projectileData.NumberOfEnemiesCanPassThrough)
                         {
-                            Destroy(gameObject);
+                            _weapon.ProjectilePool.AddObjectToPool(this);
                         }
                     }
                     else
@@ -142,7 +179,7 @@ namespace Weaponry
                 WeaponXPComponent weaponXP = _weapon.GetComponent<WeaponXPComponent>();
                 if (enemyXP && weaponXP)
                 {
-                    weaponXP.AddXP(enemyXP.XpToGiveOnKill);
+                    weaponXP.AddXP(enemyXP.XpToGiveOnKill * (1 + MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier)));
                 }
             }
         }
@@ -193,6 +230,12 @@ namespace Weaponry
             _boxCollider.enabled = shouldActivate;
             _spriteRenderer.enabled = shouldActivate;
             gameObject.SetActive(true);
+            
+            if (!shouldActivate)
+            {
+                _initialized = false;
+                StopAllCoroutines();
+            }
         }
     }
 }

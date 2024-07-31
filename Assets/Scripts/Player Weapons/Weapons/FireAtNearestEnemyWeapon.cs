@@ -6,24 +6,13 @@ namespace Weaponry
 {
     public class FireAtNearestEnemyWeapon : PlayerWeapon
     {
-        protected override IEnumerator FireWeapon(ProjectileData data)
+        protected override Vector3 GetDirectionToFireProjectile()
         {
             List<Enemy> enemies = EnemySpawnerController.Instance.EnemiesInGame;
-            Enemy closestEnemy = GetNearestEnemy(enemies);
-            if (closestEnemy)
-            {
-                for (int i = 0; i < WeaponData.NumberOfProjectilesToFire; i++)
-                {
-                
-                    Projectile projectile = Instantiate<Projectile>(WeaponData.ProjectilePrefab, MainPlayer.Instance.transform.position, Quaternion.identity);
-                    projectile.InitializeProjectile(this, data, closestEnemy.transform.position - MainPlayer.Instance.transform.position);
-                }
-
-                yield return _waitForInBetweenProjectiles;
-            }
+            return GetNearestEnemy(enemies).transform.position - MainPlayer.Instance.transform.position;
         }
 
-        private Enemy GetNearestEnemy(List<Enemy> enemies)
+        protected Enemy GetNearestEnemy(List<Enemy> enemies)
         {
             float minDistance = float.MaxValue;
             Enemy closestEnemy = null;

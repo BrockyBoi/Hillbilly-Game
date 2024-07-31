@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5113916461617134752}
   - component: {fileID: 3337673530171588248}
-  - component: {fileID: 5970115702615538014}
   - component: {fileID: 1942090042004955234}
   - component: {fileID: 3592405562092541137}
+  - component: {fileID: 8097674254735752959}
   m_Layer: 8
   m_Name: Projectile
   m_TagString: Untagged
@@ -80,18 +80,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.34, y: 0.28}
   m_EdgeRadius: 0
---- !u!114 &5970115702615538014
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1336623067824754481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b665d86b1534a164990db4c3cff53baf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!212 &1942090042004955234
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -171,3 +159,16 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &8097674254735752959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336623067824754481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 582bb060a2c283d428ceec069331ab84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxDistanceFromPlayerBeforeDestroy: 225

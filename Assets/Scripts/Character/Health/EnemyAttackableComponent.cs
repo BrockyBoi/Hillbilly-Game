@@ -23,7 +23,6 @@ public class EnemyAttackableComponent : MonoBehaviour
     {
         if (_canAttack)
         {
-            Debug.Log("Attack Player");
             playerToAttack.HealthComponent?.DoDamage(_damageToDeal);
 
             StartCoroutine(WaitUntilAttackCooldownOver());

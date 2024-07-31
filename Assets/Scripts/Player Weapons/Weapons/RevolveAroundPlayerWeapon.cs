@@ -6,7 +6,7 @@ namespace Weaponry
 {
     public class RevolveAroundPlayerWeapon : PlayerWeapon
     {
-        List<Projectile> _projectilesSpawned = new List<Projectile>();
+        List<RevolveAroundPlayerProjectile> _projectilesSpawned = new List<RevolveAroundPlayerProjectile>();
         protected override IEnumerator FireWeapon(ProjectileData projectileData)
         {
             for (int i = 0; i < WeaponData.NumberOfProjectilesToFire; i++)
@@ -14,7 +14,7 @@ namespace Weaponry
                 float spawnRadians = i * (360 / WeaponData.NumberOfProjectilesToFire) * Mathf.Deg2Rad;
                 Vector3 spawnPosition = MainPlayer.Instance.transform.position + (new Vector3(Mathf.Cos(spawnRadians), Mathf.Sin(spawnRadians)) * projectileData.ProjectileSizeMultiplier);
 
-                RevolveAroundPlayerProjectile projectile = Instantiate<Projectile>(WeaponData.ProjectilePrefab, spawnPosition, Quaternion.identity) as RevolveAroundPlayerProjectile;
+                RevolveAroundPlayerProjectile projectile = ProjectilePool.GetPoolableObject() as RevolveAroundPlayerProjectile;
                 if (!(projectile))
                 { 
                     Debug.LogError("Should be Revolve Around Player Weapon");

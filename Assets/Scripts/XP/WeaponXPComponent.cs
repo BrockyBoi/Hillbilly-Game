@@ -32,13 +32,24 @@ namespace XP
         {
             base.LevelUp();
 
-            foreach (WeaponUpgradeData upgradeData in _owningWeapon.WeaponData.WeaponUpgrades)
+            int upgradeIndex = _currentLevel - 1;
+            if (_owningWeapon.WeaponData.WeaponUpgrades.Count > upgradeIndex)
             {
+                Debug.Log("Weapon level: " + (upgradeIndex + 1));
+                WeaponUpgradeData upgradeData = _owningWeapon.WeaponData.WeaponUpgrades[upgradeIndex];
                 for (int i = 0; i < upgradeData.AttributeAmounts.Count; i++)
                 {
                     if (upgradeData.WeaponAttributes.Count > i && upgradeData.AttributeAmounts.Count > i)
                     {
-                        _owningWeapon.ModifyWeapon(upgradeData.WeaponAttributes[i], upgradeData.AttributeAmounts[i]);
+                        UpgradeAttribute attribute = upgradeData.WeaponAttributes[i];
+                        if (attribute == UpgradeAttribute.FireRate)
+                        {
+                            _owningWeapon.WeaponAttributesComponent.DecrementAttribute(attribute, upgradeData.AttributeAmounts[i]);
+                        }
+                        else
+                        {
+                            _owningWeapon.WeaponAttributesComponent.IncrementAttribute(attribute, upgradeData.AttributeAmounts[i]);
+                        }
                     }
                 }
             }

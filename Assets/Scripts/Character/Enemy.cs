@@ -13,6 +13,9 @@ public class Enemy : Character, IPoolableObject
     private EnemyXPComponent _xpComponent;
     public EnemyXPComponent XPComponent { get { return _xpComponent; } }
 
+    private UpgradeAttributesComponent _enemyAttributesComponent = new UpgradeAttributesComponent();
+    public UpgradeAttributesComponent EnemyAttributesComoponent {  get { return _enemyAttributesComponent; } }
+
     protected override void Awake()
     {
         base.Awake();
@@ -60,5 +63,10 @@ public class Enemy : Character, IPoolableObject
         gameObject.SetActive(shouldActivate);
         _spriteRenderer.enabled = shouldActivate;
         _boxCollider.enabled = shouldActivate;
+
+        if (shouldActivate)
+        {
+            HealthComponent.SetHealth(HealthComponent.DefaultHealth * (1 + _enemyAttributesComponent.GetAttribute(UpgradeAttribute.MaxHealthMultiplier)));
+        }
     }
 }
