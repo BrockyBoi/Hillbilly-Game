@@ -8,13 +8,13 @@ namespace Weaponry
     {
         protected override Vector3 GetDirectionToFireProjectile()
         {
-            List<Enemy> enemies = EnemySpawnerController.Instance.EnemiesInGame;
-            return GetRandomEnemy(enemies).transform.position - MainPlayer.Instance.transform.position;
+            return GetRandomEnemy().transform.position - MainPlayer.Instance.transform.position;
         }
 
-        protected Enemy GetRandomEnemy(List<Enemy> enemies)
+        public Enemy GetRandomEnemy()
         {
-            return enemies[Random.Range(0, enemies.Count - 1)];
+            List<Enemy> enemies = EnemySpawnerController.Instance.EnemiesInGame;
+            return enemies.Count > 0 ? enemies[Random.Range(0, enemies.Count - 1)] : null;
         }
     }
 }

@@ -7,6 +7,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
 {
     [SerializeField]
     protected float _movementSpeed = 5f;
+    protected float _movementSpeedModifier = 1f;
 
     protected Character _owningCharacter;
 
@@ -14,7 +15,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     {
         _owningCharacter = GetComponent<Character>();
 
-        if ( _owningCharacter == null )
+        if (_owningCharacter == null )
         {
             Debug.LogError("Owning Character is null");
         }
@@ -30,4 +31,9 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     }
 
     protected abstract void Move();
+
+    public void SetMovementSpeedModifier(float speedModifier)
+    {
+        _movementSpeedModifier = speedModifier;
+    }
 }

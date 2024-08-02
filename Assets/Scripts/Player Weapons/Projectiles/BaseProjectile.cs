@@ -72,13 +72,23 @@ namespace Weaponry
 
         protected bool _initialized = false;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             _boxCollider = GetComponent<BoxCollider2D>();
         }
 
-        private void Start()
+        protected virtual void OnEnable()
+        {
+
+        }
+
+        protected virtual void OnDisable()
+        {
+
+        }
+
+        protected virtual void Start()
         {
             _damageAllEnemiesInRange = DamageAllEnemiesInRange();
             _waitForTimeBetweenDamage = new WaitForSeconds(_projectileData.TimeBetweenDamage);
@@ -215,7 +225,8 @@ namespace Weaponry
         {
             yield return _waitForTimeBetweenDamage;
 
-            foreach (Enemy enemy in _enemiesInContactWith)
+            List<Enemy> enemiesToDamage = new List<Enemy>(_enemiesInContactWith);
+            foreach (Enemy enemy in enemiesToDamage)
             {
                 if (enemy)
                 {
@@ -225,7 +236,7 @@ namespace Weaponry
             }
         }
 
-        public void ActivateObject(bool shouldActivate)
+        public virtual void ActivateObject(bool shouldActivate)
         {
             _boxCollider.enabled = shouldActivate;
             _spriteRenderer.enabled = shouldActivate;

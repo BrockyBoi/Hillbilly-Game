@@ -6,6 +6,12 @@ using UnityEngine;
 public class EnemyDifficultyManager : MonoBehaviour
 {
     public static EnemyDifficultyManager Instance { get; private set; }
+    private EnemySpawnerController _enemySpawnerController;
+
+    public delegate void EOnDifficultyChange();
+    public event EOnDifficultyChange OnDifficultyChange;
+
+
     [Title("Difficulty")]
     [SerializeField]
     private float _timeBetweenDifficultyChange = 15f;
@@ -13,25 +19,23 @@ public class EnemyDifficultyManager : MonoBehaviour
     [Title("Spawn Frequency")]
     [SerializeField]
     private float _timeToTakeOffOfSpawnFrequency = .3f;
-
-    [SerializeField]
-    private float _startingSpawnFrequency = 2.5f;
-
-    [SerializeField]
-    private float _maxSpawnRate = .1f;
     private float _currentSpawnFrequency;
+    public float CurrentSpawnFrequency { get { return _currentSpawnFrequency; } }
 
     [Title("Health")]
     [SerializeField]
     private float _amountToIncreaseHealthMultiplier = .25f;
-    private float _currentHealthMultiplier;
-    public float CurrentHealthMultiplier { get { return _currentHealthMultiplier; } }
+    public float CurrentHealthMultiplier { get { return 1f + (_currentDifficultyLevel * _amountToIncreaseHealthMultiplier); } }
 
     [Title("XP")]
     [SerializeField]
     private int _xpAmountToIncreasePerLevel = 15;
-    private int _currentXPBonusAmount = 0;
-    public int CurrentXPBonusAmount { get { return _currentXPBonusAmount; } }
+    public float CurrentXPBonusModifier { get { return 1f + (_currentDifficultyLevel * _xpAmountToIncreasePerLevel); } }
+
+    [Title("Speed")]
+    [SerializeField]
+    private float _speedModifierIncreaseOnDifficultyChange = .25f;
+    public float CurrentEnemyMovementSpeedModifier { get { return 1f + (_currentDifficultyLevel * _speedModifierIncreaseOnDifficultyChange); } }
 
 
     private int _currentDifficultyLevel = 0;
@@ -41,19 +45,15 @@ public class EnemyDifficultyManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        _enemySpawnerController = GetComponent<EnemySpawnerController>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
         _waitToIncreaseDifficulty = new WaitForSeconds(_timeBetweenDifficultyChange);
+        _currentSpawnFrequency = EnemySpawnerController.Instance.StartingSpawnFrequency;
         StartCoroutine(HandleIncreaseDifficulty());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     IEnumerator HandleIncreaseDifficulty()
@@ -68,16 +68,18 @@ public class EnemyDifficultyManager : MonoBehaviour
 
     private void IncreaseDifficulty()
     {
-        _currentDifficultyLevel++;
-        _currentSpawnFrequency = Mathf.Clamp(_currentSpawnFrequency - _timeToTakeOffOfSpawnFrequency, _maxSpawnRate, _startingSpawnFrequency);
-        _currentHealthMultiplier += _amountToIncreaseHealthMultiplier;
+        if (_enemySpawnerController)
+        {
+            _currentDifficultyLevel++;
+            _currentSpawnFrequency = Mathf.Clamp(_currentSpawnFrequency - _timeToTakeOffOfSpawnFrequency, _enemySpawnerController.MaxSpawnRate, _enemySpawnerController.StartingSpawnFrequency);
 
-        EnemySpawnerController.Instance.SetSpawnInterval(_currentSpawnFrequency);
-        Debug.Log("New difficulty level " + _currentDifficultyLevel);
+            Debug.Log("New difficulty level " + _currentDifficultyLevel);
+            OnDifficultyChange?.Invoke();
+        }
     }
 
-    public int GetBonusXP()
+    public float GetBonusXP()
     {
-        return Mathf.RoundToInt(_currentDifficultyLevel * _xpAmountToIncreasePerLevel * MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier));
+        return CurrentXPBonusModifier * MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier);
     }
 }

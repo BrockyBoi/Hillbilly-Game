@@ -13,9 +13,6 @@ public class Enemy : Character, IPoolableObject
     private EnemyXPComponent _xpComponent;
     public EnemyXPComponent XPComponent { get { return _xpComponent; } }
 
-    private UpgradeAttributesComponent _enemyAttributesComponent = new UpgradeAttributesComponent();
-    public UpgradeAttributesComponent EnemyAttributesComoponent {  get { return _enemyAttributesComponent; } }
-
     protected override void Awake()
     {
         base.Awake();
@@ -66,7 +63,13 @@ public class Enemy : Character, IPoolableObject
 
         if (shouldActivate)
         {
-            HealthComponent.SetHealth(HealthComponent.DefaultHealth * (1 + _enemyAttributesComponent.GetAttribute(UpgradeAttribute.MaxHealthMultiplier)));
+            HealthComponent.SetHealth(HealthComponent.DefaultHealth * EnemyDifficultyManager.Instance.CurrentHealthMultiplier);
+            
+            EnemyMovementComponent enemyMovementComponent = GetComponent<EnemyMovementComponent>();
+            if (enemyMovementComponent)
+            {
+                enemyMovementComponent.SetMovementSpeedModifier(EnemyDifficultyManager.Instance.CurrentEnemyMovementSpeedModifier);
+            }
         }
     }
 }

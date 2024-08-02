@@ -12,7 +12,7 @@ public class EnemyMovementComponent : CharacterMovementComponent
 
         Vector2 directionVector = (playerPosition - thisPosition);
         directionVector.Normalize();
-        Vector2 movementVector = directionVector * Time.deltaTime * _movementSpeed;
+        Vector2 movementVector = directionVector * Time.deltaTime * _movementSpeed * _movementSpeedModifier;
         transform.position = thisPosition + movementVector;
     }
 }

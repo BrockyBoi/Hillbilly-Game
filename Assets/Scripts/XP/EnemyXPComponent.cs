@@ -45,7 +45,8 @@ namespace XP
         private void SpawnOrbOnGround(Character characterKilled)
         {
             XPOrb orb = _orbPool.GetPoolableObject();
-            orb.InitializeXPOrb(_xpToGiveOnKill);
+            int xpToGive = Mathf.RoundToInt(_xpToGiveOnKill * EnemyDifficultyManager.Instance.GetBonusXP());
+            orb.InitializeXPOrb(xpToGive);
         }
     }
 }

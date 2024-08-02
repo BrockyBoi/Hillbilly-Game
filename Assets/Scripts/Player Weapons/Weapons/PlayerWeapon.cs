@@ -79,8 +79,9 @@ namespace Weaponry
         {
             while (_mainPlayer.IsAlive())
             {
-                yield return new WaitForSeconds(GetAllAttributeValues(UpgradeAttribute.FireRate) + WeaponData.DefaultFireRate);
+                yield return new WaitForSeconds(2.5f);
                 yield return FireWeapon(GetCurrentProjectileData());
+                yield return new WaitForSeconds(GetAllAttributeValues(UpgradeAttribute.FireRate) + WeaponData.DefaultFireRate);
             }
         }
 

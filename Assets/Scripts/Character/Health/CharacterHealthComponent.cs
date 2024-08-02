@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CharacterHealthComponent : MonoBehaviour
 {
+    public bool GOD_MODE = false;
+
     [SerializeField]
     private float _defaultHealth = 100f;
     public float DefaultHealth { get { return _defaultHealth; } }
@@ -45,7 +47,7 @@ public class CharacterHealthComponent : MonoBehaviour
 
     public void DoDamage(float damage)
     {
-        if (IsAlive() && damage > 0)
+        if (IsAlive() && damage > 0 && !GOD_MODE)
         {
             _currentHealth = Mathf.Clamp(_currentHealth - damage, 0, _defaultHealth);
 
