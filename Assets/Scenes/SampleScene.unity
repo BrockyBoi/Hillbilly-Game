@@ -644,7 +644,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxSpawnRate: 0.1
-  _startingSpawnFrequency: 1
+  _startingSpawnFrequency: 2.5
   _minDistanceSpawnedFromPlayer: 10
   _maxDistanceSpawnedFromPlayer: 20
   _enemyPrefab: {fileID: 809142628805603757, guid: 1642f14113b2838409290e79526d7df7, type: 3}

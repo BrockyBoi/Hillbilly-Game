@@ -12,6 +12,7 @@ public abstract class Character : MonoBehaviour
     protected CharacterHealthComponent _healthComponent;
     public CharacterHealthComponent HealthComponent { get { return _healthComponent; } }
     protected CharacterMovementComponent _characterMovementComponent;
+    public CharacterMovementComponent CharacterMovementComponent { get { return _characterMovementComponent; } }
     protected SpriteRenderer _spriteRenderer;
     protected BoxCollider2D _boxCollider;
     // Start is called before the first frame update

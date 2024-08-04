@@ -34,7 +34,7 @@ namespace XP
 
         public void OnEnterPlayerPickupRange()
         {
-            if (!_movingTowardsPlayer)
+            if (!_movingTowardsPlayer && gameObject.activeInHierarchy)
             {
                 StartCoroutine(MoveTowardsPlayer());
             }
@@ -77,6 +77,11 @@ namespace XP
             {
                 StopAllCoroutines();
             }
+        }
+
+        public bool GetIsActive()
+        {
+            return gameObject.activeInHierarchy;
         }
     }
 }

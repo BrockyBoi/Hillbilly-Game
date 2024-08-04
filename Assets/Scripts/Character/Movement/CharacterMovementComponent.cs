@@ -11,6 +11,9 @@ public abstract class CharacterMovementComponent : MonoBehaviour
 
     protected Character _owningCharacter;
 
+    protected Vector2 _lastMovementVector = Vector2.zero;
+    public Vector2 LastMovementVector { get { return _lastMovementVector; } }
+
     private void Awake()
     {
         _owningCharacter = GetComponent<Character>();

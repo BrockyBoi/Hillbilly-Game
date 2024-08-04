@@ -56,6 +56,16 @@ namespace Weaponry
         protected UpgradeAttributesComponent _attributesComponent = new UpgradeAttributesComponent();
         public UpgradeAttributesComponent WeaponAttributesComponent { get { return _attributesComponent; } }
 
+        protected virtual void OnEnable()
+        {
+
+        }
+
+        protected virtual void OnDisable()
+        {
+
+        }
+
         public void Initialize()
         {
             if (!_weaponScriptableObject)

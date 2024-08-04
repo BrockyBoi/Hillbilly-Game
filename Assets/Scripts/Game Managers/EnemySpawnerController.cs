@@ -162,6 +162,7 @@ public class EnemySpawnerController : MonoBehaviour
     public List<Enemy> GetRandomEnemiesWithinRange(int desiredEnemyCount, Vector3 startPos, float distance)
     {
         List<Enemy> enemies = new List<Enemy>(_enemiesInGame.Where(enemy => Vector3.Distance(startPos, enemy.transform.position) <= distance).ToList());
+        List<Enemy> enemiesInRange = new List<Enemy>();
         for (int i = 0; i < desiredEnemyCount; i++)
         {
             Enemy randomEnemy = null;
@@ -174,10 +175,10 @@ public class EnemySpawnerController : MonoBehaviour
 
             if (randomEnemy)
             {
-                enemies.Add(randomEnemy);
+                enemiesInRange.Add(randomEnemy);
             }
         }
 
-        return enemies;
+        return enemiesInRange;
     }
 }

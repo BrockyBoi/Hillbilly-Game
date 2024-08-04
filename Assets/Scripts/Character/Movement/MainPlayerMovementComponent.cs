@@ -13,5 +13,7 @@ public class MainPlayerMovementComponent : CharacterMovementComponent
         Vector3 moveVector = directionVector * Time.deltaTime * _movementSpeed * movementSpeedModifier;
 
         transform.position = transform.position + moveVector;
+
+        _lastMovementVector = moveVector;
     }
 }
