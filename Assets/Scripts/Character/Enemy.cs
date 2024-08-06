@@ -55,6 +55,13 @@ public class Enemy : Character, IPoolableObject
     }
     #endregion
 
+    protected override void OnHealthChange(float currentHealth)
+    {
+        base.OnHealthChange(currentHealth);
+
+        _spriteRenderer.color = Color.Lerp(Color.grey, Color.red, _healthComponent.GetCurrentHealth() / _healthComponent.DefaultHealth);
+    }
+
     public void ActivateObject(bool shouldActivate)
     {
         gameObject.SetActive(shouldActivate);
@@ -63,7 +70,9 @@ public class Enemy : Character, IPoolableObject
 
         if (shouldActivate)
         {
-            HealthComponent.SetHealth(HealthComponent.DefaultHealth * EnemyDifficultyManager.Instance.CurrentHealthMultiplier);
+            float health = HealthComponent.DefaultHealth * (1f + EnemyDifficultyManager.Instance.CurrentHealthMultiplier);
+            HealthComponent.SetMaxHealth(health);
+            HealthComponent.SetHealth(health);
             
             EnemyMovementComponent enemyMovementComponent = GetComponent<EnemyMovementComponent>();
             if (enemyMovementComponent)

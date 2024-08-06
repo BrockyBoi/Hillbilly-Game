@@ -44,6 +44,17 @@ public abstract class Character : MonoBehaviour
         }
     }
 
+    protected virtual void OnEnable()
+    {
+        _healthComponent.OnHealthChange -= OnHealthChange;
+        _healthComponent.OnHealthChange += OnHealthChange;
+    }
+
+    protected virtual void OnDisable()
+    {
+        _healthComponent.OnHealthChange -= OnHealthChange;
+    }
+
     // Update is called once per frame
     protected virtual void Update()
     {
@@ -53,6 +64,8 @@ public abstract class Character : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D other) { }
     protected virtual void OnTriggerExit2D(Collider2D other) { }
     protected virtual void OnTriggerStay2D(Collider2D other) { }
+
+    protected virtual void OnHealthChange(float currentHealth) { }
 
     public bool IsAlive()
     {

@@ -173,7 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxDistanceFromPlayerBeforeDestroy: 10000
-  _defaultBeamWidth: 1
+  _defaultBeamWidth: 0.1
   _beamColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!120 &6648220264076801414
 LineRenderer:
@@ -217,10 +217,7 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions:
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 1, z: 1}
-  - {x: 1, y: 1, z: 1}
+  m_Positions: []
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

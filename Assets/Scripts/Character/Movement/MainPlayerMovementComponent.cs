@@ -11,7 +11,6 @@ public class MainPlayerMovementComponent : CharacterMovementComponent
         MainPlayer player = _owningCharacter as MainPlayer;
         float movementSpeedModifier = player.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.MovementSpeed);
         Vector3 moveVector = directionVector * Time.deltaTime * _movementSpeed * movementSpeedModifier;
-
         transform.position = transform.position + moveVector;
 
         _lastMovementVector = moveVector;

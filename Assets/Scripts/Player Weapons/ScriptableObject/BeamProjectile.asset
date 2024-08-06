@@ -33,7 +33,7 @@ MonoBehaviour:
     - WeaponAttributes: 06000000
       AttributeAmounts:
       - 2
-    - WeaponAttributes: 0900000000000000
+    - WeaponAttributes: 0900000002000000
       AttributeAmounts:
       - 1
       - 1
