@@ -6,21 +6,12 @@ namespace Weaponry
 {
     public class FireInPlayerDirectionWeapon : PlayerWeapon
     {
-        MainPlayer _player;
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-
-            _player = MainPlayer.Instance;
-        }
-
         protected override Vector3 GetDirectionToFireProjectile()
         {
             Vector3 dirFacing = Vector3.zero;
-            if (_player)
+            if (_mainPlayer)
             {
-                dirFacing = _player.CharacterMovementComponent.LastMovementVector;
+                dirFacing = _mainPlayer.CharacterMovementComponent.LastMovementVector;
             }
 
             return dirFacing;

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace StatusEffects
 {
+    [System.Serializable]
     class StatusEffectManagerData
     {
         public StatusEffectData StatusEffectData;
@@ -21,27 +22,34 @@ namespace StatusEffects
     public class StatusEffectsManager : MonoBehaviour
     {
         [SerializeField]
-        private List<StatusEffectData> _allStatusEffectDatas;
+        private List<StatusEffectScriptableObject> _allStatusEffectDatas;
 
         private Dictionary<EStatusEffectType, StatusEffectManagerData> _statusEffects = new Dictionary<EStatusEffectType, StatusEffectManagerData>();
 
         public delegate void EOnStackLoss(StatusEffectData effectData);
         public event EOnStackLoss OnStackLoss;
+
+        private Character _owningCharacter;
         
         private void Awake()
         {
-            foreach (StatusEffectData effect in _allStatusEffectDatas)
+            InitializeDictionary();
+
+            _owningCharacter = GetComponent<Character>();
+            if (!_owningCharacter)
             {
-                if (_statusEffects.ContainsKey(effect.StatusEffectType))
-                {
-                    StatusEffectManagerData managerData = new StatusEffectManagerData(effect);
-                    if (effect.TimeToLoseStack > 0)
-                    {
-                        managerData.StatusEffectTimerCoroutine = LoseStack(effect.StatusEffectType);
-                    }
-                    _statusEffects.Add(effect.StatusEffectType, managerData);
-                }
+                Debug.LogError("Status effects manager does not have associated Character");
             }
+        }
+
+        public int GetStacks(EStatusEffectType statusEffectType)
+        {
+            if (!_statusEffects.ContainsKey(statusEffectType))
+            {
+                InitializeDictionary();
+            }
+
+            return _statusEffects[statusEffectType].CurrentStacks;
         }
 
         public void IncrementStacks(EStatusEffectType statusEffectType, int stacks)
@@ -58,6 +66,33 @@ namespace StatusEffects
         public void ClearStacks(EStatusEffectType statusEffectType)
         {
             SetStacks(statusEffectType, 0);
+        }
+
+        private void InitializeDictionary()
+        {
+            foreach (StatusEffectScriptableObject effect in _allStatusEffectDatas)
+            {
+                if (!_statusEffects.ContainsKey(effect.StatusEffectData.StatusEffectType))
+                {
+                    StatusEffectManagerData managerData = new StatusEffectManagerData(effect.StatusEffectData);
+                    if (effect.StatusEffectData.TimeToLoseStack > 0)
+                    {
+                        managerData.StatusEffectTimerCoroutine = LoseStack(effect.StatusEffectData.StatusEffectType);
+                    }
+                    _statusEffects.Add(effect.StatusEffectData.StatusEffectType, managerData);
+                }
+            }
+        }
+
+        public void ClearAllStacks()
+        {
+            foreach (var keyValuePair in _statusEffects)
+            {
+                if (_statusEffects.ContainsKey(keyValuePair.Key))
+                {
+                    ClearStacks(keyValuePair.Key);
+                }
+            }
         }
 
         private void SetStacks(EStatusEffectType statusEffectType, int stacks)
@@ -81,6 +116,11 @@ namespace StatusEffects
             while (managerData.CurrentStacks > 0)
             {
                 yield return new WaitForSeconds(managerData.StatusEffectData.TimeToLoseStack);
+
+                if (managerData.StatusEffectData.DamagePerStack > 0)
+                {
+                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * GetStacks(statusEffectType));
+                }
 
                 OnStackLoss.Invoke(managerData.StatusEffectData);
 

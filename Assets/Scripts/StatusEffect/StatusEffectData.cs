@@ -34,7 +34,7 @@ namespace StatusEffects
         [Title("Damage")]
         public bool CanApplyDamageOnStackLoss;
 
-        [ShowIf("CanApplyDamageOverTime")]
+        [ShowIf("CanApplyDamageOnStackLoss")]
         public float DamagePerStack;
 
         [Title("Extra Status Effect")]

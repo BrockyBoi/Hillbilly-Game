@@ -61,7 +61,7 @@ namespace Weaponry
         List<Enemy> _enemiesInContactWith = new List<Enemy>();
 
         private SpriteRenderer _spriteRenderer;
-        private BoxCollider2D _boxCollider;
+        protected BoxCollider2D _boxCollider;
 
         [SerializeField]
         private float _maxDistanceFromPlayerBeforeDestroy = 15;
@@ -138,24 +138,14 @@ namespace Weaponry
             transform.position = transform.position + (_direction * Time.deltaTime * _projectileData.ProjectileSpeed);
         }
 
-        void OnTriggerEnter2D(Collider2D other) 
+        protected virtual void OnTriggerEnter2D(Collider2D other) 
         { 
             if (other.gameObject)
             {
                 Enemy enemy = other.gameObject.GetComponent<Enemy>();
                 if (enemy)
                 {
-                    EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
-                    if (healthComponent)
-                    {
-                        bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
-                        healthComponent.DoDamage(_projectileData.DamageToDeal);
-
-                        if (killsEnemy)
-                        {
-                            AddXP(enemy);
-                        }
-                    }
+                    OnContactWithEnemy(enemy);
 
                     if (!_projectileData.CanPassThroughUnlimitedEnemies)
                     {
@@ -181,6 +171,33 @@ namespace Weaponry
             }
         }
 
+        protected virtual void OnTriggerExit2D(Collider2D other)
+        {
+            if (_projectileData.CanPassThroughUnlimitedEnemies)
+            {
+                Enemy enemy = other.gameObject.GetComponent<Enemy>();
+                if (enemy)
+                {
+                    RemoveEnemy(enemy);
+                }
+            }
+        }
+
+        protected virtual void OnContactWithEnemy(Enemy enemy)
+        {
+            EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
+            if (healthComponent && _projectileData.DamageToDeal > 0)
+            {
+                bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
+                healthComponent.DoDamage(_projectileData.DamageToDeal);
+
+                if (killsEnemy)
+                {
+                    AddXP(enemy);
+                }
+            }
+        }
+
         private void AddXP(Enemy enemy)
         {
             if (enemy && _weapon)
@@ -190,18 +207,6 @@ namespace Weaponry
                 if (enemyXP && weaponXP)
                 {
                     weaponXP.AddXP(enemyXP.XpToGiveOnKill * (1 + MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier)));
-                }
-            }
-        }
-
-        void OnTriggerExit2D(Collider2D other) 
-        {
-            if (_projectileData.CanPassThroughUnlimitedEnemies)
-            {
-                Enemy enemy = other.gameObject.GetComponent<Enemy>();
-                if (enemy)
-                {
-                     RemoveEnemy(enemy);
                 }
             }
         }
@@ -221,7 +226,7 @@ namespace Weaponry
             }
         }
 
-        IEnumerator DamageAllEnemiesInRange()
+        private IEnumerator DamageAllEnemiesInRange()
         {
             yield return _waitForTimeBetweenDamage;
 
@@ -230,8 +235,7 @@ namespace Weaponry
             {
                 if (enemy)
                 {
-                    EnemyHealthComponent healthComponent = enemy?.GetComponent<EnemyHealthComponent>();
-                    healthComponent?.DoDamage(_projectileData.DamageToDeal);
+                    OnContactWithEnemy(enemy);
                 }
             }
         }

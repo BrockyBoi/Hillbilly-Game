@@ -110,6 +110,7 @@ GameObject:
   - component: {fileID: 7754876681769838906}
   - component: {fileID: 2885952398572790581}
   - component: {fileID: 2948801789839206563}
+  - component: {fileID: 2668745870615034501}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -145,7 +146,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fc4a4a9f21729c47a6a3b4af8147320, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  GOD_MODE: 0
+  _defaultHealth: 100
 --- !u!114 &825322063380961098
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -357,3 +359,18 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &2668745870615034501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7223614064981767247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ce59c7eab806d4ea109b45c4a38418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _allStatusEffectDatas:
+  - {fileID: 11400000, guid: 2be92091478336d49bcba6c7a207de36, type: 2}
+  - {fileID: 11400000, guid: e224a0c50d0ab2a42a3c619727596692, type: 2}

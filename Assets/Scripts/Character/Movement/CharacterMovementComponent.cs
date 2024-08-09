@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StatusEffects;
 
 public abstract class CharacterMovementComponent : MonoBehaviour
 {
@@ -14,9 +15,12 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     protected Vector2 _lastMovementVector = Vector2.zero;
     public Vector2 LastMovementVector { get { return _lastMovementVector; } }
 
+    private StatusEffectsManager _owningCharacterStatusEffectManager;
+
     private void Awake()
     {
         _owningCharacter = GetComponent<Character>();
+        _owningCharacterStatusEffectManager = GetComponent<StatusEffectsManager>();
 
         if (_owningCharacter == null )
         {
@@ -27,7 +31,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (_owningCharacter && _owningCharacter.IsAlive())
+        if (_owningCharacter && _owningCharacter.IsAlive() && !_owningCharacter.IsFrozen())
         {
             Move();
         }

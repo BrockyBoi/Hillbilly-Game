@@ -68,6 +68,8 @@ public class Enemy : Character, IPoolableObject
         _spriteRenderer.enabled = shouldActivate;
         _boxCollider.enabled = shouldActivate;
 
+        StatusEffectsManager.ClearAllStacks();
+
         if (shouldActivate)
         {
             float health = HealthComponent.DefaultHealth * (1f + EnemyDifficultyManager.Instance.CurrentHealthMultiplier);

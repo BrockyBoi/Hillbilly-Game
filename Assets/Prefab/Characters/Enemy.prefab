@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5907366943672505765}
   - component: {fileID: 6152265290038473368}
   - component: {fileID: 6638543014061300538}
+  - component: {fileID: 4404683531509111535}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -187,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88e65bbce58a9024f90098b249a199ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  GOD_MODE: 0
   _defaultHealth: 100
 --- !u!50 &6152265290038473368
 Rigidbody2D:
@@ -228,3 +230,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _xpToGiveOnKill: 10
+--- !u!114 &4404683531509111535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809142628805603757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66ce59c7eab806d4ea109b45c4a38418, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _allStatusEffectDatas:
+  - {fileID: 11400000, guid: 2be92091478336d49bcba6c7a207de36, type: 2}
+  - {fileID: 11400000, guid: e224a0c50d0ab2a42a3c619727596692, type: 2}

@@ -48,7 +48,7 @@ namespace Weaponry
 
         protected WaitForSeconds _waitForInBetweenProjectiles;
 
-        private MainPlayer _mainPlayer;
+        protected MainPlayer _mainPlayer;
 
         protected PoolableObjectsComponent<BaseProjectile> _projectilePool = new PoolableObjectsComponent<BaseProjectile>();
         public PoolableObjectsComponent<BaseProjectile> ProjectilePool { get { return _projectilePool; } }
@@ -91,7 +91,7 @@ namespace Weaponry
             {
                 yield return new WaitForSeconds(2.5f);
                 yield return FireWeapon(GetCurrentProjectileData());
-                yield return new WaitForSeconds(GetAllAttributeValues(UpgradeAttribute.FireRate) + WeaponData.DefaultFireRate);
+                yield return new WaitForSeconds(WeaponData.DefaultFireRate - GetAllAttributeValues(UpgradeAttribute.FireRate));
             }
         }
 

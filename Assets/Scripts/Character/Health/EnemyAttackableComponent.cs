@@ -12,16 +12,19 @@ public class EnemyAttackableComponent : MonoBehaviour
 
     WaitForSeconds _waitBetweenAttacks;
 
-    private bool _canAttack = true;
+    private bool _isInAttackCooldown = false;
+
+    private Enemy _owningEnemy;
 
     private void Start()
     {
+        _owningEnemy = GetComponent<Enemy>();
         _waitBetweenAttacks = new WaitForSeconds(_timeBetweenAttacks);
     }
 
     public void AttackPlayer(MainPlayer playerToAttack)
     {
-        if (_canAttack)
+        if (CanAttack())
         {
             playerToAttack.HealthComponent?.DoDamage(_damageToDeal);
 
@@ -36,10 +39,15 @@ public class EnemyAttackableComponent : MonoBehaviour
 
     private IEnumerator WaitUntilAttackCooldownOver()
     {
-        _canAttack = false;
+        _isInAttackCooldown = true;
 
         yield return _waitBetweenAttacks;
 
-        _canAttack = true;
+        _isInAttackCooldown = false;
+    }
+
+    private bool CanAttack()
+    {
+        return !_isInAttackCooldown && !_owningEnemy.IsFrozen();
     }
 }
