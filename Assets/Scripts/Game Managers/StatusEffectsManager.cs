@@ -54,13 +54,7 @@ namespace StatusEffects
 
         public void IncrementStacks(EStatusEffectType statusEffectType, int stacks)
         {
-            int prevStacks = _statusEffects[statusEffectType].CurrentStacks;
             SetStacks(statusEffectType, _statusEffects[statusEffectType].CurrentStacks + stacks);
-
-            if (prevStacks <= 0)
-            {
-                StartCoroutine(_statusEffects[statusEffectType].StatusEffectTimerCoroutine);
-            }
         }
 
         public void ClearStacks(EStatusEffectType statusEffectType)
@@ -97,11 +91,18 @@ namespace StatusEffects
 
         private void SetStacks(EStatusEffectType statusEffectType, int stacks)
         {
-            _statusEffects[statusEffectType].CurrentStacks = Mathf.Clamp(stacks, 0, _statusEffects[statusEffectType].StatusEffectData.MaxStacks);
+            StatusEffectManagerData data = _statusEffects[statusEffectType];
+
+            int prevStacks = data.CurrentStacks;
+            data.CurrentStacks = Mathf.Clamp(stacks, 0, data.StatusEffectData.MaxStacks);
         
-            if (_statusEffects[statusEffectType].CurrentStacks <= 0)
+            if (prevStacks > 0 && data.CurrentStacks == 0)
             {
-                StopCoroutine(_statusEffects[statusEffectType].StatusEffectTimerCoroutine);
+                StopCoroutine(data.StatusEffectTimerCoroutine);
+            }
+            else if (prevStacks == 0 && data.CurrentStacks > 0 && _owningCharacter.IsAlive())
+            {
+                StartCoroutine(data.StatusEffectTimerCoroutine);
             }
         }
 
@@ -117,14 +118,14 @@ namespace StatusEffects
             {
                 yield return new WaitForSeconds(managerData.StatusEffectData.TimeToLoseStack);
 
-                if (managerData.StatusEffectData.DamagePerStack > 0)
-                {
-                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * GetStacks(statusEffectType));
-                }
-
-                OnStackLoss.Invoke(managerData.StatusEffectData);
+                OnStackLoss?.Invoke(managerData.StatusEffectData);
 
                 SetStacks(statusEffectType, managerData.CurrentStacks - 1);
+
+                if (managerData.StatusEffectData.DamagePerStack > 0)
+                {
+                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * (GetStacks(statusEffectType) + 1));
+                }
             }
         }
     }

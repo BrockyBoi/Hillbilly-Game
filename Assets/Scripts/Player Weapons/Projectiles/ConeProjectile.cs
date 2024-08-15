@@ -12,13 +12,20 @@ namespace Weaponry
 
         protected override void MoveProjectile()
         {
-            Vector3 playerMovementDir = MainPlayer.Instance.CharacterMovementComponent.LastMovementVector;
-            Vector3 playerPos = MainPlayer.Instance.transform.position;
+            MainPlayer player = MainPlayer.Instance;
+            Vector3 playerMovementDir = player.CharacterMovementComponent.LastMovementVector == Vector2.zero ? player.transform.up : player.CharacterMovementComponent.LastMovementVector;
             playerMovementDir.Normalize();
-            
-            _boxCollider.transform.position = playerPos + new Vector3(Mathf.Cos(playerMovementDir.x), Mathf.Sin(playerMovementDir.y)) * _distanceInFrontOfPlayer;
 
-            float angle = Vector3.Angle(Vector2.up, playerMovementDir);
+            Vector3 playerPos = player.transform.position;
+            
+            _boxCollider.transform.position = playerPos + (playerMovementDir * _distanceInFrontOfPlayer);
+
+            float angle = Vector3.Angle(player.transform.up, playerMovementDir);
+            if (playerMovementDir.x > 0)
+            {
+                angle *= -1;
+            }
+
             _boxCollider.transform.localRotation = Quaternion.Euler(0,0, angle);
         }
     }

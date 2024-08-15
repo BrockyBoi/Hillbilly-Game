@@ -35,13 +35,13 @@ public class MainPlayer : Character
         _xpOrbCollider = GetComponent<CircleCollider2D>();
     }
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
         UpgradeAttributesComponent.OnAttributeChanged -= OnAttributeChanged;
         UpgradeAttributesComponent.OnAttributeChanged += OnAttributeChanged;
     }
 
-    private void OnDisable()
+    protected override void OnDisable()
     {
         UpgradeAttributesComponent.OnAttributeChanged -= OnAttributeChanged;
     }

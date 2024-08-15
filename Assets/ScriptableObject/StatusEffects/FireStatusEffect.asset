@@ -18,7 +18,7 @@ MonoBehaviour:
     MaxStacks: 99
     TimeToLoseStack: 0.2
     CanApplyDamageOnStackLoss: 1
-    DamagePerStack: 5
+    DamagePerStack: 1
     CanApplyNewStatusEffect: 0
     StacksNeededForNewEffect: 0
     NewStatusEffectType: 0

@@ -24,7 +24,7 @@ MonoBehaviour:
       ProjectileSizeMultiplier: 1
       DamageToDeal: 45
       TimeBetweenDamage: 0.2
-      WeaponDuration: 1
+      WeaponDuration: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 0
       ProjectileArcCount: 0

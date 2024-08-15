@@ -87,9 +87,10 @@ namespace Weaponry
 
         IEnumerator FireWeaponCoroutine()
         {
+            yield return new WaitForSeconds(2.5f);
+
             while (_mainPlayer.IsAlive())
             {
-                yield return new WaitForSeconds(2.5f);
                 yield return FireWeapon(GetCurrentProjectileData());
                 yield return new WaitForSeconds(WeaponData.DefaultFireRate - GetAllAttributeValues(UpgradeAttribute.FireRate));
             }

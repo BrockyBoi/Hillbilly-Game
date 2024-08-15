@@ -15,7 +15,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     protected Vector2 _lastMovementVector = Vector2.zero;
     public Vector2 LastMovementVector { get { return _lastMovementVector; } }
 
-    private StatusEffectsManager _owningCharacterStatusEffectManager;
+    protected StatusEffectsManager _owningCharacterStatusEffectManager;
 
     private void Awake()
     {
@@ -34,6 +34,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
         if (_owningCharacter && _owningCharacter.IsAlive() && !_owningCharacter.IsFrozen())
         {
             Move();
+            RotateCharacter();
         }
     }
 
@@ -42,5 +43,16 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     public void SetMovementSpeedModifier(float speedModifier)
     {
         _movementSpeedModifier = speedModifier;
+    }
+
+    protected void RotateCharacter()
+    {
+        float angle = Vector3.Angle(_owningCharacter.transform.up, _lastMovementVector);
+        if (_lastMovementVector.x > 0)
+        {
+            angle *= -1;
+        }
+
+        _owningCharacter.SpriteRenderer.transform.localRotation = Quaternion.Euler(0,0,angle);
     }
 }

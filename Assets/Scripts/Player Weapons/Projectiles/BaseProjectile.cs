@@ -18,10 +18,10 @@ namespace Weaponry
         [Range(1, 1000)]
         public float DamageToDeal;
 
-        [Range(.1f, 1)]
+        [Range(.1f, 10)]
         public float TimeBetweenDamage;
 
-        [Range(.2f, 10)]
+        [Range(0f, 10)]
         public float WeaponDuration;
 
         [Range(0, 10)]
@@ -123,6 +123,11 @@ namespace Weaponry
 
             transform.localScale = _initialScale;
             transform.localScale *= projectileData.ProjectileSizeMultiplier;
+
+            if (_projectileData.WeaponDuration > 0)
+            {
+                StartCoroutine(DisableAfterProjectileDuration());
+            }
         }
 
         public void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData, Vector3 direction)
@@ -240,11 +245,18 @@ namespace Weaponry
             }
         }
 
+        private IEnumerator DisableAfterProjectileDuration()
+        {
+            yield return new WaitForSeconds(_projectileData.WeaponDuration);
+
+            _weapon.ProjectilePool.AddObjectToPool(this);
+        }
+
         public virtual void ActivateObject(bool shouldActivate)
         {
             _boxCollider.enabled = shouldActivate;
             _spriteRenderer.enabled = shouldActivate;
-            gameObject.SetActive(true);
+            gameObject.SetActive(shouldActivate);
             
             if (!shouldActivate)
             {

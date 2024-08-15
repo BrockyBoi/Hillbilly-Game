@@ -13,6 +13,10 @@ namespace Weaponry
             {
                 dirFacing = _mainPlayer.CharacterMovementComponent.LastMovementVector;
             }
+            else
+            {
+                Debug.LogError(gameObject.name + " has a null player");
+            }
 
             return dirFacing;
         }

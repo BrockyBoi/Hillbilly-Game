@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab577aecc7261f1418ab61caafe7bbde, type: 3}
+  m_Name: IceBreathWeapon
+  m_EditorClassIdentifier: 
+  WeaponData:
+    WeaponID: IceBreath
+    DefaultFireRate: 4
+    MaxFireRate: 0.05
+    NumberOfProjectilesToFire: 1
+    TimeBetweenProjectiles: 0.1
+    ProjectilePrefab: {fileID: 535457952690520844, guid: 67af527a5bd14b541a0ce3538cce9032, type: 3}
+    DefaultProjectileData:
+      ProjectileSpeed: 1
+      ProjectileSizeMultiplier: 1
+      DamageToDeal: 1
+      TimeBetweenDamage: 1
+      WeaponDuration: 0.2
+      NumberOfEnemiesCanPassThrough: 0
+      CanPassThroughUnlimitedEnemies: 1
+      ProjectileArcCount: 0
+      CanWeaponArc: 0
+    WeaponUpgrades: []
