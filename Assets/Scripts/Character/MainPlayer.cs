@@ -49,7 +49,6 @@ public class MainPlayer : Character
     private void Start()
     {
         _startingXPOrbColliderRadius = _xpOrbCollider.radius;
-        _upgradesAttributesComponent.SetAttribute(UpgradeAttribute.MovementSpeed, 1);
     }
 
     protected override void OnTriggerEnter2D(Collider2D other)

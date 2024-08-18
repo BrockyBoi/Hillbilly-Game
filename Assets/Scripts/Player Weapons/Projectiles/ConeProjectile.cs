@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using StatusEffects;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,12 +8,13 @@ namespace Weaponry
 {
     public class ConeProjectile : BaseProjectile
     {
+        [Title("Cone Data")]
         [SerializeField]
         protected float _distanceInFrontOfPlayer = 15;
 
         protected override void MoveProjectile()
         {
-            MainPlayer player = MainPlayer.Instance;
+            MainPlayer player = _weapon.OwningPlayer;
             Vector3 playerMovementDir = player.CharacterMovementComponent.LastMovementVector == Vector2.zero ? player.transform.up : player.CharacterMovementComponent.LastMovementVector;
             playerMovementDir.Normalize();
 

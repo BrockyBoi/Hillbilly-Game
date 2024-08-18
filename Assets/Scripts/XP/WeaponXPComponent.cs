@@ -9,8 +9,15 @@ namespace XP
     [Serializable]
     public struct WeaponUpgradeData
     {
-        public List<UpgradeAttribute> WeaponAttributes;
-        public List<float> AttributeAmounts;
+        public List<SingleUpgradeData> WeaponAttributes;
+    }
+
+    [Serializable]
+    public struct SingleUpgradeData
+    {
+        public UpgradeAttribute Attribute;
+        public float UpgradeAmount;
+        public bool IsFlatAmount;
     }
 
 
@@ -37,19 +44,16 @@ namespace XP
             {
                 Debug.Log("Weapon level: " + (upgradeIndex + 1));
                 WeaponUpgradeData upgradeData = _owningWeapon.WeaponData.WeaponUpgrades[upgradeIndex];
-                for (int i = 0; i < upgradeData.AttributeAmounts.Count; i++)
+                for (int i = 0; i < upgradeData.WeaponAttributes.Count; i++)
                 {
-                    if (upgradeData.WeaponAttributes.Count > i && upgradeData.AttributeAmounts.Count > i)
+                    SingleUpgradeData singleUpgrade = upgradeData.WeaponAttributes[i];
+                    if (singleUpgrade.Attribute == UpgradeAttribute.FireRate)
                     {
-                        UpgradeAttribute attribute = upgradeData.WeaponAttributes[i];
-                        if (attribute == UpgradeAttribute.FireRate)
-                        {
-                            _owningWeapon.WeaponAttributesComponent.DecrementAttribute(attribute, upgradeData.AttributeAmounts[i]);
-                        }
-                        else
-                        {
-                            _owningWeapon.WeaponAttributesComponent.IncrementAttribute(attribute, upgradeData.AttributeAmounts[i]);
-                        }
+                        _owningWeapon.WeaponAttributesComponent.DecrementAttributeAmount(singleUpgrade.Attribute, singleUpgrade.IsFlatAmount, singleUpgrade.UpgradeAmount);
+                    }
+                    else
+                    {
+                        _owningWeapon.WeaponAttributesComponent.IncrementAttributeAmount(singleUpgrade.Attribute, singleUpgrade.IsFlatAmount, singleUpgrade.UpgradeAmount);
                     }
                 }
             }

@@ -72,7 +72,7 @@ public class Enemy : Character, IPoolableObject
 
         if (shouldActivate)
         {
-            float health = HealthComponent.DefaultHealth * (1f + EnemyDifficultyManager.Instance.CurrentHealthMultiplier);
+            float health = HealthComponent.DefaultHealth * EnemyDifficultyManager.Instance.CurrentHealthMultiplier;
             HealthComponent.SetMaxHealth(health);
             HealthComponent.SetHealth(health);
             

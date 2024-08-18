@@ -44,11 +44,10 @@ namespace Weaponry
         public WeaponXPComponent WeaponXPComponent { get { return _weaponXPComponent; } }
         public WeaponData WeaponData { get { return _weaponScriptableObject.WeaponData; } }
 
-        private Dictionary<UpgradeAttribute, float> _weaponModifiers = new Dictionary<UpgradeAttribute, float>();
-
         protected WaitForSeconds _waitForInBetweenProjectiles;
 
-        protected MainPlayer _mainPlayer;
+        protected MainPlayer _owningPlayer;
+        public MainPlayer OwningPlayer { get { return _owningPlayer; } }
 
         protected PoolableObjectsComponent<BaseProjectile> _projectilePool = new PoolableObjectsComponent<BaseProjectile>();
         public PoolableObjectsComponent<BaseProjectile> ProjectilePool { get { return _projectilePool; } }
@@ -74,7 +73,7 @@ namespace Weaponry
                 return;
             }
 
-            _mainPlayer = MainPlayer.Instance;
+            _owningPlayer = MainPlayer.Instance;
             _waitForInBetweenProjectiles = new WaitForSeconds(WeaponData.TimeBetweenProjectiles);
 
             _weaponXPComponent = GetComponent<WeaponXPComponent>();
@@ -89,42 +88,46 @@ namespace Weaponry
         {
             yield return new WaitForSeconds(2.5f);
 
-            while (_mainPlayer.IsAlive())
+            while (_owningPlayer.IsAlive())
             {
                 yield return FireWeapon(GetCurrentProjectileData());
-                yield return new WaitForSeconds(WeaponData.DefaultFireRate - GetAllAttributeValues(UpgradeAttribute.FireRate));
+                yield return new WaitForSeconds(GetAllAttributeValues(UpgradeAttribute.FireRate, WeaponData.DefaultFireRate, false));
             }
         }
 
         protected ProjectileData GetCurrentProjectileData()
         {
-            float weaponSpeed = WeaponData.DefaultProjectileData.ProjectileSpeed + GetAllAttributeValues(UpgradeAttribute.ProjectileSpeed);
-            float weaponSize = WeaponData.DefaultProjectileData.ProjectileSizeMultiplier + GetAllAttributeValues(UpgradeAttribute.ProjectileSize);
-            float damageDealt = WeaponData.DefaultProjectileData.DamageToDeal + GetAllAttributeValues(UpgradeAttribute.Damage);
+            float weaponSpeed =  GetAllAttributeValues(UpgradeAttribute.ProjectileSpeed, WeaponData.DefaultProjectileData.ProjectileSpeed);
+            float weaponSize =  GetAllAttributeValues(UpgradeAttribute.ProjectileSize, WeaponData.DefaultProjectileData.ProjectileSizeMultiplier);
+            float damageAmount = GetAllAttributeValues(UpgradeAttribute.Damage, WeaponData.DefaultProjectileData.DamageToDeal);
+            float knockbackAmount = GetAllAttributeValues(UpgradeAttribute.KnockbackMultiplier, WeaponData.DefaultProjectileData.KnockbackAmount);
+            bool canKnockbackIntoOtherEnemies = WeaponData.DefaultProjectileData.CanKnockbackIntoOtherEnemies;
             float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
-            float weaponDuration = WeaponData.DefaultProjectileData.WeaponDuration + GetAllAttributeValues(UpgradeAttribute.Duration);
-            int numberOfEnemiesToPassThrough = WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough + (int)GetAllAttributeValues(UpgradeAttribute.NumberOfEnemiesCanPassThrough);
+            float weaponDuration =  GetAllAttributeValues(UpgradeAttribute.Duration, WeaponData.DefaultProjectileData.WeaponDuration);
+            int numberOfEnemiesToPassThrough = (int)GetAllAttributeValues(UpgradeAttribute.NumberOfEnemiesCanPassThrough, WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough);
             bool canPassThroughUnlimitedEnemies = WeaponData.DefaultProjectileData.CanPassThroughUnlimitedEnemies;
             bool canArc = WeaponData.DefaultProjectileData.CanWeaponArc;
             int arcCount = WeaponData.DefaultProjectileData.ProjectileArcCount;
 
-            return new ProjectileData(weaponSpeed, weaponSize, damageDealt, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies, canArc, arcCount);
+            return new ProjectileData(weaponSpeed, weaponSize, knockbackAmount, canKnockbackIntoOtherEnemies, damageAmount, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies, canArc, arcCount);
         }
 
-        protected float GetAllAttributeValues(UpgradeAttribute upgradeAttribute)
+        protected float GetAllAttributeValues(UpgradeAttribute upgradeAttribute, float defaultValue, bool shouldIncrement = true)
         {
-            return WeaponAttributesComponent.GetAttribute(upgradeAttribute) + MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(upgradeAttribute);
+            float flatValues = WeaponAttributesComponent.GetFlatAttributeValue(upgradeAttribute) + _owningPlayer.UpgradeAttributesComponent.GetFlatAttributeValue(upgradeAttribute);
+            float multiplierValues = WeaponAttributesComponent.GetMultiplierAttributeValue(upgradeAttribute) * _owningPlayer.UpgradeAttributesComponent.GetMultiplierAttributeValue(upgradeAttribute);
+            return (shouldIncrement ? defaultValue + flatValues : defaultValue - flatValues) * multiplierValues;
         }
 
         protected virtual IEnumerator FireWeapon(ProjectileData data)
         {
-            int numberOfProjectiles = Mathf.RoundToInt(WeaponData.NumberOfProjectilesToFire + WeaponAttributesComponent.GetAttribute(UpgradeAttribute.NumberOfProjectiles));
+            int numberOfProjectiles = Mathf.RoundToInt(WeaponAttributesComponent.GetModifiedAttributeValue(UpgradeAttribute.NumberOfProjectiles, WeaponData.NumberOfProjectilesToFire));
             for (int i = 0; i < numberOfProjectiles; i++)
             {
                 BaseProjectile projectile = _projectilePool.GetPoolableObject();
                 if (projectile)
                 {
-                    projectile.transform.position = _mainPlayer.transform.position;
+                    projectile.transform.position = _owningPlayer.transform.position;
                     projectile.InitializeProjectile(this, data, GetDirectionToFireProjectile());
                 }
                 else
@@ -136,10 +139,11 @@ namespace Weaponry
                 {
                     yield return _waitForInBetweenProjectiles;
                 }
-                else
-                {
-                    yield break;
-                }
+            }
+
+            if (data.WeaponDuration > 0)
+            {
+                yield return new WaitForSeconds(data.WeaponDuration);
             }
         }
 

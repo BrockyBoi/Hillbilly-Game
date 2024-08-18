@@ -1,3 +1,5 @@
+using Sirenix.OdinInspector;
+using StatusEffects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +16,11 @@ namespace Weaponry
 
         [Range(1, 5)]
         public float ProjectileSizeMultiplier;
+
+        [Range(0, 100)]
+        public float KnockbackAmount;
+
+        public bool CanKnockbackIntoOtherEnemies;
 
         [Range(1, 1000)]
         public float DamageToDeal;
@@ -34,7 +41,7 @@ namespace Weaponry
 
         public bool CanWeaponArc;
 
-        public ProjectileData(float speed, float sizeMultiplier, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount)
+        public ProjectileData(float speed, float sizeMultiplier, float knockbackAmount, bool canKnockbackIntoOtherEnemies, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount)
         {
             this.ProjectileSpeed = speed;
             this.ProjectileSizeMultiplier = sizeMultiplier;
@@ -45,6 +52,8 @@ namespace Weaponry
             this.CanPassThroughUnlimitedEnemies = canPassThroughUnlimitedEnemies;
             this.CanWeaponArc = canWeaponArc;
             this.ProjectileArcCount = arcCount;
+            this.KnockbackAmount = knockbackAmount;
+            this.CanKnockbackIntoOtherEnemies = canKnockbackIntoOtherEnemies;
         }
     }
 
@@ -63,6 +72,11 @@ namespace Weaponry
         private SpriteRenderer _spriteRenderer;
         protected BoxCollider2D _boxCollider;
 
+        [Title("Status Effects")]
+        [SerializeField]
+        protected List<StatusEffectAttackData> _statusEffectsToApply;
+
+        [Title("Base Projectile Data")]
         [SerializeField]
         private float _maxDistanceFromPlayerBeforeDestroy = 15;
 
@@ -100,7 +114,7 @@ namespace Weaponry
             {
                 MoveProjectile();
 
-                float distanceFromPlayer = (transform.position - MainPlayer.Instance.transform.position).sqrMagnitude;
+                float distanceFromPlayer = (transform.position - _weapon.OwningPlayer.transform.position).sqrMagnitude;
                 if (distanceFromPlayer > _maxDistanceFromPlayerBeforeDestroy)
                 {
                     _weapon.ProjectilePool.AddObjectToPool(this);
@@ -156,7 +170,7 @@ namespace Weaponry
                     {
                         _numberOfEnemiesPassedThrough++;
 
-                        if (_numberOfEnemiesPassedThrough >= _projectileData.NumberOfEnemiesCanPassThrough)
+                        if (_numberOfEnemiesPassedThrough > _projectileData.NumberOfEnemiesCanPassThrough)
                         {
                             _weapon.ProjectilePool.AddObjectToPool(this);
                         }
@@ -190,15 +204,32 @@ namespace Weaponry
 
         protected virtual void OnContactWithEnemy(Enemy enemy)
         {
-            EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
-            if (healthComponent && _projectileData.DamageToDeal > 0)
+            if (enemy)
             {
-                bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
-                healthComponent.DoDamage(_projectileData.DamageToDeal);
-
-                if (killsEnemy)
+                EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
+                if (healthComponent && _projectileData.DamageToDeal > 0)
                 {
-                    AddXP(enemy);
+                    bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
+                    healthComponent.DoDamage(_projectileData.DamageToDeal);
+
+                    Vector2 knockbackDirection = enemy.transform.position - _weapon.OwningPlayer.transform.position;
+                    knockbackDirection.Normalize();
+                    knockbackDirection *= _projectileData.KnockbackAmount;
+                    enemy.CharacterMovementComponent.AddKnockback(knockbackDirection);
+
+                    foreach (StatusEffectAttackData statusEffectAttack in _statusEffectsToApply)
+                    {
+                        StatusEffectsManager statusEffectsManager = enemy.StatusEffectsManager;
+                        if (statusEffectsManager)
+                        {
+                            statusEffectsManager.IncrementStacks(statusEffectAttack.EffectType, statusEffectAttack.StacksToAdd);
+                        }
+                    }
+
+                    if (killsEnemy)
+                    {
+                        AddXP(enemy);
+                    }
                 }
             }
         }
@@ -211,7 +242,7 @@ namespace Weaponry
                 WeaponXPComponent weaponXP = _weapon.GetComponent<WeaponXPComponent>();
                 if (enemyXP && weaponXP)
                 {
-                    weaponXP.AddXP(enemyXP.XpToGiveOnKill * (1 + MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier)));
+                    weaponXP.AddXP(_weapon.OwningPlayer.UpgradeAttributesComponent.GetModifiedAttributeValue(UpgradeAttribute.XPMultiplier, enemyXP.XpToGiveOnKill));
                 }
             }
         }

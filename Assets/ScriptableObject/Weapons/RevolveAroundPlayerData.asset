@@ -10,21 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ab577aecc7261f1418ab61caafe7bbde, type: 3}
-  m_Name: IceBreathWeapon
+  m_Name: RevolveAroundPlayerData
   m_EditorClassIdentifier: 
   WeaponData:
-    WeaponID: IceBreath
-    DefaultFireRate: 4
-    MaxFireRate: 0.05
-    NumberOfProjectilesToFire: 1
-    TimeBetweenProjectiles: 0.1
-    ProjectilePrefab: {fileID: 535457952690520844, guid: 67af527a5bd14b541a0ce3538cce9032, type: 3}
+    WeaponID: RevolveAroundPlayer
+    DefaultFireRate: 1
+    MaxFireRate: 1
+    NumberOfProjectilesToFire: 4
+    TimeBetweenProjectiles: 0.2
+    ProjectilePrefab: {fileID: 1336623067824754481, guid: fa96480227d298a42b5ba52e39802fda, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
-      ProjectileSizeMultiplier: 1
-      DamageToDeal: 1
-      TimeBetweenDamage: 1
-      WeaponDuration: 0.2
+      ProjectileSizeMultiplier: 2
+      DamageToDeal: 10
+      TimeBetweenDamage: 0.195
+      WeaponDuration: 5
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
       ProjectileArcCount: 0

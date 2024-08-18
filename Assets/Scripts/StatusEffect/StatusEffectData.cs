@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,5 +46,12 @@ namespace StatusEffects
 
         [ShowIf("CanApplyNewStatusEffect")]
         public EStatusEffectType NewStatusEffectType;
+    }
+
+    [Serializable]
+    public class StatusEffectAttackData
+    {
+        public EStatusEffectType EffectType;
+        public int StacksToAdd = 1;
     }
 }

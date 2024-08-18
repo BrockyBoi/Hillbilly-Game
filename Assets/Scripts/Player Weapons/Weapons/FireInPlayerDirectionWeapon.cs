@@ -9,9 +9,9 @@ namespace Weaponry
         protected override Vector3 GetDirectionToFireProjectile()
         {
             Vector3 dirFacing = Vector3.zero;
-            if (_mainPlayer)
+            if (_owningPlayer)
             {
-                dirFacing = _mainPlayer.CharacterMovementComponent.LastMovementVector;
+                dirFacing = _owningPlayer.CharacterMovementComponent.LastMovementVector;
             }
             else
             {

@@ -9,8 +9,9 @@ public class MainPlayerMovementComponent : CharacterMovementComponent
         Vector3 directionVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         directionVector.Normalize();
         MainPlayer player = _owningCharacter as MainPlayer;
-        float movementSpeedModifier = player.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.MovementSpeed);
-        Vector3 moveVector = directionVector * Time.deltaTime * _movementSpeed * movementSpeedModifier;
+
+        float movementSpeedModifier = player.UpgradeAttributesComponent.GetModifiedAttributeValue(UpgradeAttribute.MovementSpeed, _movementSpeed);
+        Vector3 moveVector = directionVector * Time.deltaTime * movementSpeedModifier;
         transform.position = transform.position + moveVector;
 
         moveVector.Normalize();

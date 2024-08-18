@@ -9,6 +9,11 @@ namespace Weaponry
         protected override Vector3 GetDirectionToFireProjectile()
         {
             List<Enemy> enemies = EnemySpawnerController.Instance.EnemiesInGame;
+            if (enemies.Count == 0 )
+            {
+                return Vector3.zero;
+            }
+
             return GetNearestEnemy(enemies).transform.position - MainPlayer.Instance.transform.position;
         }
 

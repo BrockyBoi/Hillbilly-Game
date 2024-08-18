@@ -80,6 +80,6 @@ public class EnemyDifficultyManager : MonoBehaviour
 
     public float GetBonusXP()
     {
-        return CurrentXPBonusModifier * MainPlayer.Instance.UpgradeAttributesComponent.GetAttribute(UpgradeAttribute.XPMultiplier);
+        return MainPlayer.Instance.UpgradeAttributesComponent.GetModifiedAttributeValue(UpgradeAttribute.XPMultiplier, CurrentXPBonusModifier);
     }
 }

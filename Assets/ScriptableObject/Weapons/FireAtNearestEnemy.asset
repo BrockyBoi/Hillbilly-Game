@@ -22,6 +22,7 @@ MonoBehaviour:
     DefaultProjectileData:
       ProjectileSpeed: 2
       ProjectileSizeMultiplier: 1
+      KnockbackAmount: 0
       DamageToDeal: 45
       TimeBetweenDamage: 0.2
       WeaponDuration: 0
@@ -29,24 +30,4 @@ MonoBehaviour:
       CanPassThroughUnlimitedEnemies: 0
       ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades:
-    - WeaponAttributes: 0100000000000000
-      AttributeAmounts:
-      - 1
-      - 1
-    - WeaponAttributes: 0400000002000000
-      AttributeAmounts:
-      - 1
-      - 1
-    - WeaponAttributes: 0500000003000000
-      AttributeAmounts:
-      - 20
-      - 0.5
-    - WeaponAttributes: 02000000
-      AttributeAmounts:
-      - 2
-    - WeaponAttributes: 030000000000000004000000
-      AttributeAmounts:
-      - 0.2
-      - 1
-      - 1
+    WeaponUpgrades: []

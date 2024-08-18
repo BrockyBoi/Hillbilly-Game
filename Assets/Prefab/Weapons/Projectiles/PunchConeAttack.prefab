@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 745948827833240987}
   - component: {fileID: 8845467992110754087}
   m_Layer: 8
-  m_Name: IceBreathProjectile
+  m_Name: PunchConeAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +121,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 0, g: 1, b: 0.9282162, a: 1}
+  m_Color: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -143,8 +143,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2449d2afbde65274a9797e4b4cbb4502, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _statusEffectsToApply:
-  - EffectType: 2
-    StacksToAdd: 1
+  _statusEffectsToApply: []
   _maxDistanceFromPlayerBeforeDestroy: 5000
   _distanceInFrontOfPlayer: 1

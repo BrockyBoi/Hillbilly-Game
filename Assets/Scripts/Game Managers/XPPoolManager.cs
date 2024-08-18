@@ -23,6 +23,5 @@ namespace XP
         {
             _xpOrbPool.Initialize(_xpOrbPrefab);
         }
-       
     }
 }

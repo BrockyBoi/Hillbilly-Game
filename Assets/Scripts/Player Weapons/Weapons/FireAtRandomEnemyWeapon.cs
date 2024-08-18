@@ -8,6 +8,12 @@ namespace Weaponry
     {
         protected override Vector3 GetDirectionToFireProjectile()
         {
+            Enemy randomEnmy = GetRandomEnemy();
+            if (!randomEnmy)
+            {
+                return Vector3.zero;
+            }
+
             return GetRandomEnemy().transform.position - MainPlayer.Instance.transform.position;
         }
 

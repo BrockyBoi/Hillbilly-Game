@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Weaponry
     {
         private List<Enemy> _enemiesToAttack = new List<Enemy>();
 
+        [Title("Beam Data")]
         [SerializeField]
         private float _defaultBeamWidth = 1f;
 

@@ -7,12 +7,13 @@ public class EnemyMovementComponent : CharacterMovementComponent
     protected override void Move()
     {
         MainPlayer player = MainPlayer.Instance;
-        Vector2 playerPosition = player.transform.position;
-        Vector2 thisPosition = transform.position;
+        Vector3 playerPosition = player.transform.position;
+        Vector3 thisPosition = transform.position;
 
-        Vector2 directionVector = (playerPosition - thisPosition);
+        Vector3 directionVector = (playerPosition - thisPosition);
         directionVector.Normalize();
-        Vector2 movementVector = directionVector * Time.deltaTime * _movementSpeed * _movementSpeedModifier;
+
+        Vector3 movementVector = (directionVector * Time.deltaTime * _movementSpeed * _movementSpeedModifier);
         transform.position = thisPosition + movementVector;
 
         _lastMovementVector = movementVector;
