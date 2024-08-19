@@ -15,6 +15,7 @@ namespace StatusEffects
         Burn,
         Dazed,
         Vulnerable,
+        Poison,
         Weak
     }
 
@@ -37,6 +38,9 @@ namespace StatusEffects
 
         [ShowIf("CanApplyDamageOnStackLoss")]
         public float DamagePerStack;
+
+        [ShowIf("CanApplyDamageOnStackLoss")]
+        public float HealthLossPercentagePerStack;
 
         [Title("Extra Status Effect")]
         public bool CanApplyNewStatusEffect;

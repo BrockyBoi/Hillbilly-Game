@@ -22,10 +22,10 @@ namespace Weaponry
 
         public bool CanKnockbackIntoOtherEnemies;
 
-        [Range(1, 1000)]
+        [Range(0, 1000)]
         public float DamageToDeal;
 
-        [Range(.1f, 10)]
+        [Range(.01f, 10)]
         public float TimeBetweenDamage;
 
         [Range(0f, 10)]
@@ -206,25 +206,28 @@ namespace Weaponry
         {
             if (enemy)
             {
+                if (_projectileData.KnockbackAmount > 0)
+                {
+                    Vector2 knockbackDirection = enemy.transform.position - _weapon.OwningPlayer.transform.position;
+                    knockbackDirection.Normalize();
+                    knockbackDirection *= _projectileData.KnockbackAmount;
+                    enemy.CharacterMovementComponent.AddKnockback(knockbackDirection);
+                }
+
+                foreach (StatusEffectAttackData statusEffectAttack in _statusEffectsToApply)
+                {
+                    StatusEffectsManager statusEffectsManager = enemy.StatusEffectsManager;
+                    if (statusEffectsManager)
+                    {
+                        statusEffectsManager.IncrementStacks(statusEffectAttack.EffectType, statusEffectAttack.StacksToAdd);
+                    }
+                }
+
                 EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
                 if (healthComponent && _projectileData.DamageToDeal > 0)
                 {
                     bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
                     healthComponent.DoDamage(_projectileData.DamageToDeal);
-
-                    Vector2 knockbackDirection = enemy.transform.position - _weapon.OwningPlayer.transform.position;
-                    knockbackDirection.Normalize();
-                    knockbackDirection *= _projectileData.KnockbackAmount;
-                    enemy.CharacterMovementComponent.AddKnockback(knockbackDirection);
-
-                    foreach (StatusEffectAttackData statusEffectAttack in _statusEffectsToApply)
-                    {
-                        StatusEffectsManager statusEffectsManager = enemy.StatusEffectsManager;
-                        if (statusEffectsManager)
-                        {
-                            statusEffectsManager.IncrementStacks(statusEffectAttack.EffectType, statusEffectAttack.StacksToAdd);
-                        }
-                    }
 
                     if (killsEnemy)
                     {

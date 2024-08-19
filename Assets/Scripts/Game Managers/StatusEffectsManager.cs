@@ -56,6 +56,12 @@ namespace StatusEffects
         public void IncrementStacks(EStatusEffectType statusEffectType, int stacks)
         {
             SetStacks(statusEffectType, _statusEffects[statusEffectType].CurrentStacks + stacks);
+            Debug.Log("New stacks: " + _statusEffects[statusEffectType].CurrentStacks);
+            switch (statusEffectType)
+            {
+                default:
+                    break;
+            }
         }
 
         public void ClearStacks(EStatusEffectType statusEffectType)
@@ -121,11 +127,17 @@ namespace StatusEffects
 
                 OnStackLoss?.Invoke(managerData.StatusEffectData);
 
-                SetStacks(statusEffectType, managerData.CurrentStacks - 1);
+                int currentStackCount = managerData.CurrentStacks;
+                SetStacks(statusEffectType, currentStackCount - 1);
 
                 if (managerData.StatusEffectData.DamagePerStack > 0)
                 {
-                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * (GetStacks(statusEffectType) + 1));
+                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * currentStackCount);
+                }
+
+                if (managerData.StatusEffectData.HealthLossPercentagePerStack > 0)
+                {
+                    _owningCharacter.HealthComponent.DoDamage(_owningCharacter.HealthComponent.MaxHealth * .01f * currentStackCount * managerData.StatusEffectData.HealthLossPercentagePerStack);
                 }
             }
         }
