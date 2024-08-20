@@ -80,10 +80,9 @@ public class UpgradeAttributesComponent
     {
         if (!_upgradeAttributes.ContainsKey(attributeType))
         {
-            float defaultValue = attributeType == UpgradeAttribute.ProjectileSize ? 1 :0;
             UpgradeAttributeAmounts amounts = new UpgradeAttributeAmounts()
             {
-                FlatAmount = defaultValue,
+                FlatAmount = 0,
                 MultiplierAmount = 1
             };
 

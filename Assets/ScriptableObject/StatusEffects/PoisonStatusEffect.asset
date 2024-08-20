@@ -17,7 +17,7 @@ MonoBehaviour:
     IsPermanentStatusEffect: 0
     MaxStacks: 20
     TimeToLoseStack: 3
-    CanApplyDamageOnStackLoss: 1
+    CanApplyDamage: 1
     DamagePerStack: 0
     HealthLossPercentagePerStack: 3
     CanApplyNewStatusEffect: 0

@@ -12,6 +12,8 @@ public class Enemy : Character, IPoolableObject
     private EnemyAttackableComponent _attackableComponent;
     private EnemyXPComponent _xpComponent;
     public EnemyXPComponent XPComponent { get { return _xpComponent; } }
+    private bool _isTouchingPlayer;
+    public bool IsTouchingPlayer { get { return _isTouchingPlayer; } }
 
     protected override void Awake()
     {
@@ -31,6 +33,7 @@ public class Enemy : Character, IPoolableObject
             return;
         }
 
+        _isTouchingPlayer = true;
         MainPlayer mainPlayer = other.gameObject.GetComponent<MainPlayer>();
         if (mainPlayer != null)
         {
@@ -52,6 +55,13 @@ public class Enemy : Character, IPoolableObject
         {
             _attackableComponent?.AttackPlayer(mainPlayer);
         }
+    }
+
+    protected override void OnTriggerExit2D(Collider2D other)
+    {
+        base.OnTriggerExit2D(other);
+
+        _isTouchingPlayer = false;
     }
     #endregion
 
@@ -81,6 +91,10 @@ public class Enemy : Character, IPoolableObject
             {
                 enemyMovementComponent.SetMovementSpeedModifier(EnemyDifficultyManager.Instance.CurrentEnemyMovementSpeedModifier);
             }
+        }
+        else
+        {
+            _isTouchingPlayer = false;
         }
     }
 }

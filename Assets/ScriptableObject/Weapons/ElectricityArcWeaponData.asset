@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab577aecc7261f1418ab61caafe7bbde, type: 3}
+  m_Name: ElectricityArcWeaponData
+  m_EditorClassIdentifier: 
+  WeaponData:
+    WeaponID: ElectricityArcWeapon
+    DefaultFireRate: 3
+    MaxFireRate: 1
+    NumberOfProjectilesToFire: 1
+    TimeBetweenProjectiles: 0.2
+    ProjectilePrefab: {fileID: 1336623067824754481, guid: d77566891d90691448d977a87cc4d759, type: 3}
+    DefaultProjectileData:
+      ProjectileSpeed: 1
+      ProjectileSizeMultiplier: 1
+      KnockbackAmount: 0
+      CanKnockbackIntoOtherEnemies: 0
+      DamageToDeal: 20
+      TimeBetweenDamage: 1
+      WeaponDuration: 0.1
+      NumberOfEnemiesCanPassThrough: 0
+      CanPassThroughUnlimitedEnemies: 1
+      ProjectileArcCount: 5
+      CanWeaponArc: 1
+    WeaponUpgrades: []

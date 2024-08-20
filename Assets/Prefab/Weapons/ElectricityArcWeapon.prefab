@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3437424706744741715
+--- !u!1 &2849409728609278984
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,38 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1051286549076603071}
-  - component: {fileID: 7790659136687456402}
-  - component: {fileID: 8186190242718214307}
+  - component: {fileID: 3860270877330246645}
+  - component: {fileID: 8242662858253958250}
+  - component: {fileID: 1388129126231982123}
   m_Layer: 0
-  m_Name: PunchWeapon
+  m_Name: ElectricityArcWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1051286549076603071
+  m_IsActive: 1
+--- !u!4 &3860270877330246645
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3437424706744741715}
+  m_GameObject: {fileID: 2849409728609278984}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10.1137495, y: 2.5375, z: 1}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7790659136687456402
+--- !u!114 &8242662858253958250
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3437424706744741715}
+  m_GameObject: {fileID: 2849409728609278984}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 86f81797208bed147963c4fca517f483, type: 3}
@@ -47,19 +47,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _xpNeededPerLevel:
   - 5
-  - 25
   - 50
   - 100
---- !u!114 &8186190242718214307
+  - 125
+--- !u!114 &1388129126231982123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3437424706744741715}
+  m_GameObject: {fileID: 2849409728609278984}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d55e6b2e45489741a0eaa36990bfd78, type: 3}
+  m_Script: {fileID: 11500000, guid: 53cc58ff24c36b749a04796b82584cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _weaponScriptableObject: {fileID: 11400000, guid: a1cea3a85e0a45348ac7b1dc73d7d516, type: 2}
+  _weaponScriptableObject: {fileID: 11400000, guid: cfc01aaddff86514b9c3e45d2fdbeacf, type: 2}

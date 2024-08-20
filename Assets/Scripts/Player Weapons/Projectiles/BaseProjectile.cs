@@ -204,6 +204,11 @@ namespace Weaponry
 
         protected virtual void OnContactWithEnemy(Enemy enemy)
         {
+            OnContactWithEnemy(enemy, _projectileData.DamageToDeal);
+        }
+
+        protected virtual void OnContactWithEnemy(Enemy enemy, float damageToDo)
+        {
             if (enemy)
             {
                 if (_projectileData.KnockbackAmount > 0)
@@ -224,10 +229,10 @@ namespace Weaponry
                 }
 
                 EnemyHealthComponent healthComponent = enemy.GetComponent<EnemyHealthComponent>();
-                if (healthComponent && _projectileData.DamageToDeal > 0)
+                if (healthComponent && damageToDo > 0)
                 {
-                    bool killsEnemy = healthComponent.DoesDamageKill(_projectileData.DamageToDeal);
-                    healthComponent.DoDamage(_projectileData.DamageToDeal);
+                    bool killsEnemy = healthComponent.DoesDamageKill(damageToDo);
+                    healthComponent.DoDamage(damageToDo);
 
                     if (killsEnemy)
                     {

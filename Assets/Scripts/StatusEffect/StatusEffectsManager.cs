@@ -6,7 +6,7 @@ using Weaponry;
 namespace StatusEffects
 {
     [System.Serializable]
-    class StatusEffectManagerData
+    public class StatusEffectManagerData
     {
         public StatusEffectData StatusEffectData;
         public int CurrentStacks;
@@ -23,14 +23,14 @@ namespace StatusEffects
     public class StatusEffectsManager : MonoBehaviour
     {
         [SerializeField]
-        private List<StatusEffectScriptableObject> _allStatusEffectDatas;
+        protected List<StatusEffectScriptableObject> _allStatusEffectDatas;
 
-        private Dictionary<EStatusEffectType, StatusEffectManagerData> _statusEffects = new Dictionary<EStatusEffectType, StatusEffectManagerData>();
+        protected Dictionary<EStatusEffectType, StatusEffectManagerData> _statusEffects = new Dictionary<EStatusEffectType, StatusEffectManagerData>();
 
         public delegate void EOnStackLoss(StatusEffectData effectData);
         public event EOnStackLoss OnStackLoss;
 
-        private Character _owningCharacter;
+        protected Character _owningCharacter;
         
         private void Awake()
         {
@@ -41,6 +41,16 @@ namespace StatusEffects
             {
                 Debug.LogError("Status effects manager does not have associated Character");
             }
+        }
+
+        protected virtual void Start()
+        {
+
+        }
+
+        protected virtual void OnDisable()
+        {
+
         }
 
         public int GetStacks(EStatusEffectType statusEffectType)
@@ -56,7 +66,6 @@ namespace StatusEffects
         public void IncrementStacks(EStatusEffectType statusEffectType, int stacks)
         {
             SetStacks(statusEffectType, _statusEffects[statusEffectType].CurrentStacks + stacks);
-            Debug.Log("New stacks: " + _statusEffects[statusEffectType].CurrentStacks);
             switch (statusEffectType)
             {
                 default:
@@ -127,17 +136,34 @@ namespace StatusEffects
 
                 OnStackLoss?.Invoke(managerData.StatusEffectData);
 
-                int currentStackCount = managerData.CurrentStacks;
-                SetStacks(statusEffectType, currentStackCount - 1);
+                if (managerData.StatusEffectData.ApplyDamageOnLoseStack)
+                {
+                    AttemptDamageCharacterWithStatusEffect(statusEffectType);
+                }
 
+                SetStacks(statusEffectType, managerData.CurrentStacks - 1);
+            }
+        }
+
+        protected void AttemptDamageCharacterWithStatusEffect(EStatusEffectType statusEffectType)
+        {
+            if (!_statusEffects.ContainsKey(statusEffectType))
+            {
+                return;
+            }
+
+            StatusEffectManagerData managerData = _statusEffects[statusEffectType];
+            if (managerData.StatusEffectData.CanApplyDamage)
+            {
+                int stackCount = GetStacks(statusEffectType);
                 if (managerData.StatusEffectData.DamagePerStack > 0)
                 {
-                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * currentStackCount);
+                    _owningCharacter.HealthComponent.DoDamage(managerData.StatusEffectData.DamagePerStack * stackCount);
                 }
 
                 if (managerData.StatusEffectData.HealthLossPercentagePerStack > 0)
                 {
-                    _owningCharacter.HealthComponent.DoDamage(_owningCharacter.HealthComponent.MaxHealth * .01f * currentStackCount * managerData.StatusEffectData.HealthLossPercentagePerStack);
+                    _owningCharacter.HealthComponent.DoDamage(_owningCharacter.HealthComponent.MaxHealth * .01f * stackCount * managerData.StatusEffectData.HealthLossPercentagePerStack);
                 }
             }
         }

@@ -24,7 +24,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
 
     protected StatusEffectsManager _owningCharacterStatusEffectManager;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _owningCharacterStatusEffectManager = GetComponent<StatusEffectsManager>();
 

@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 3337673530171588248}
   - component: {fileID: 1942090042004955234}
   - component: {fileID: 3592405562092541137}
-  - component: {fileID: -4685766749612050124}
   - component: {fileID: 6648220264076801414}
+  - component: {fileID: 4990727375538184023}
   m_Layer: 8
-  m_Name: BeamProjectile
+  m_Name: ElectricityArcProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -123,7 +123,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10911, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.78058076, b: 0.21226418, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -160,23 +160,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &-4685766749612050124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1336623067824754481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81d745894b010c24f9cc2f94f773f792, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _statusEffectsToApply: []
-  _maxDistanceFromPlayerBeforeDestroy: 10000
-  _defaultBeamWidth: 0.1
-  _visualWidthModifier: 0.75
-  _beamColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!120 &6648220264076801414
 LineRenderer:
   serializedVersion: 2
@@ -227,8 +210,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0.8914186
-        value: 0.06766915
+        time: 0.007019162
+        value: 0.03382516
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -279,3 +262,22 @@ LineRenderer:
   m_UseWorldSpace: 1
   m_Loop: 0
   m_ApplyActiveColorSpace: 1
+--- !u!114 &4990727375538184023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1336623067824754481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d03ad4d401ef394a9a97dc727d0c1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _statusEffectsToApply:
+  - EffectType: 3
+    StacksToAdd: 10
+  _maxDistanceFromPlayerBeforeDestroy: 1000
+  _defaultBeamWidth: 1
+  _visualWidthModifier: 0.75
+  _beamColor: {r: 1, g: 0.8873908, b: 0, a: 1}

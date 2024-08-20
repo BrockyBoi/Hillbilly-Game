@@ -8,64 +8,9 @@ using UnityEngine.UIElements;
 namespace Weaponry
 {
     [RequireComponent(typeof(LineRenderer))]
-    public class BeamProjectile : BaseProjectile
+    public class BeamProjectile : BaseBeamProjectile
     {
-        private List<Enemy> _enemiesToAttack = new List<Enemy>();
-
-        [Title("Beam Data")]
-        [SerializeField]
-        private float _defaultBeamWidth = 1f;
-
-        [SerializeField]
-        private float _visualWidthModifier = .75f;
-
-        [SerializeField]
-        private Color _beamColor = Color.red;
-
-        private LineRenderer _lineRenderer;
-        protected override void Awake()
-        {
-            base.Awake();
-
-            _lineRenderer = GetComponent<LineRenderer>();
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnDisable();
-
-            _lineRenderer.positionCount = 0;
-            _enemiesToAttack.Clear();
-        }
-
-        protected override void MoveProjectile()
-        {
-            Enemy firstEnemy = _enemiesToAttack.Count > 0 ? _enemiesToAttack[0] : null;
-            if (!firstEnemy || !firstEnemy.IsAlive())
-            {
-                SetNewEnemiesToAttack();
-            }
-
-            _enemiesToAttack = _enemiesToAttack.Where(enemy => enemy && enemy.IsAlive()).ToList();
-            RayCastToEnemies(_enemiesToAttack);
-        }
-
-        public override void ActivateObject(bool shouldActivate)
-        {
-            gameObject.SetActive(shouldActivate);
-
-            if (!shouldActivate)
-            {
-                _initialized = false;
-                StopAllCoroutines();
-            }
-
-            _lineRenderer.enabled = shouldActivate;
-            _lineRenderer.positionCount = 0;
-            _enemiesToAttack.Clear();
-        }
-
-        private void RayCastToEnemies(List<Enemy> enemiesToAttack)
+        protected override void AttackEnemies(List<Enemy> enemiesToAttack)
         {
             if (enemiesToAttack.Count == 0)
             {
@@ -76,6 +21,7 @@ namespace Weaponry
 
             _lineRenderer.positionCount = enemiesToAttack.Count + 1;
             _lineRenderer.startColor = _beamColor;
+            _lineRenderer.endColor = _beamColor;
 
             transform.position = startPos;
 
@@ -108,7 +54,7 @@ namespace Weaponry
                             EnemyHealthComponent enemyHealth = enemyInCollision.HealthComponent as EnemyHealthComponent;
                             if (enemyHealth)
                             {
-                                enemyHealth.DoDamage(_projectileData.DamageToDeal * Time.deltaTime);
+                                OnContactWithEnemy(enemyInCollision, _projectileData.DamageToDeal * Time.deltaTime);
                                 enemiesToIgnoreFurtherDamage.Add(enemyInCollision);
                             }
                         }
@@ -122,40 +68,7 @@ namespace Weaponry
                 }
             }
         }
-
-        private Enemy GetRandomEnemy()
-        {
-            Enemy enemy = null;
-            FireAtRandomEnemyWeapon randomWeapon = _weapon as FireAtRandomEnemyWeapon;
-            if (randomWeapon)
-            {
-                enemy = randomWeapon.GetRandomEnemy();
-            }
-
-            return enemy;
-        }
-
-        private void SetNewEnemiesToAttack()
-        {
-            _enemiesToAttack.Clear();
-            _enemiesToAttack.Add(GetRandomEnemy());
-            if (_projectileData.ProjectileArcCount > 0 && _enemiesToAttack[0])
-            {
-                List<Enemy> extraEnemies = EnemySpawnerController.Instance.GetRandomEnemiesWithinRange(_projectileData.ProjectileArcCount, _enemiesToAttack[0].transform.position, 10f);
-                _enemiesToAttack.AddRange(extraEnemies.Where(x => !_enemiesToAttack.Contains(x)));
-            }
-        }
     }
-
-
-
-
-
-
-
-
-
-
 
     public static class ExtDebug
     {

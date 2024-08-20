@@ -6,12 +6,12 @@ namespace Weaponry
 {
     public class BeamWeapon : FireAtRandomEnemyWeapon
     {
-        List<BeamProjectile> _beamProjectiles = new List<BeamProjectile>();
+        List<BaseBeamProjectile> _beamProjectiles = new List<BaseBeamProjectile>();
         protected override IEnumerator FireWeapon(ProjectileData data)
         {
             for (int i = 0; i < WeaponData.NumberOfProjectilesToFire; i++)
             {
-                BeamProjectile beamProjectile = _projectilePool.GetPoolableObject() as BeamProjectile;
+                BaseBeamProjectile beamProjectile = _projectilePool.GetPoolableObject() as BaseBeamProjectile;
                 if (beamProjectile)
                 {
                     beamProjectile.InitializeProjectile(this, data);

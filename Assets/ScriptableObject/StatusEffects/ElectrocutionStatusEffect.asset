@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dc8430d4e4f722d47a594bc0eb87aefa, type: 3}
-  m_Name: FireStatusEffect
+  m_Name: ElectrocutionStatusEffect
   m_EditorClassIdentifier: 
   StatusEffectData:
-    StatusEffectType: 4
+    StatusEffectType: 3
     IsPermanentStatusEffect: 0
-    MaxStacks: 99
-    TimeToLoseStack: 0.2
+    MaxStacks: 20
+    TimeToLoseStack: 1
     CanApplyDamage: 1
-    DamagePerStack: 2
-    HealthLossPercentagePerStack: 0
+    DamagePerStack: 0
+    HealthLossPercentagePerStack: 7
     CanApplyNewStatusEffect: 0
     StacksNeededForNewEffect: 0
     NewStatusEffectType: 0

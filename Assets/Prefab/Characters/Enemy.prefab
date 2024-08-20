@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5907366943672505765}
   - component: {fileID: 6152265290038473368}
   - component: {fileID: 6638543014061300538}
-  - component: {fileID: 4404683531509111535}
+  - component: {fileID: 2553391138401972198}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -67,6 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damageToDeal: 15
   _timeBetweenAttacks: 0.75
+  _timeUntilAttack: 0.5
 --- !u!114 &6800864851707815427
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _xpToGiveOnKill: 10
---- !u!114 &4404683531509111535
+--- !u!114 &2553391138401972198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,12 +189,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 809142628805603757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66ce59c7eab806d4ea109b45c4a38418, type: 3}
+  m_Script: {fileID: 11500000, guid: c4e50df7e269f934aa23bd463f0ee151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _allStatusEffectDatas:
+  - {fileID: 11400000, guid: bd4acce4c37edc34d8c81a1ae5a8b772, type: 2}
   - {fileID: 11400000, guid: 2be92091478336d49bcba6c7a207de36, type: 2}
   - {fileID: 11400000, guid: e224a0c50d0ab2a42a3c619727596692, type: 2}
+  - {fileID: 11400000, guid: 9decba5a20cc8024791e0e76dab27cd6, type: 2}
 --- !u!1 &4217267952991731779
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,10 +4,30 @@ using UnityEngine;
 
 public class EnemyMovementComponent : CharacterMovementComponent
 {
+    MainPlayer _player;
+    EnemyAttackableComponent _attackableComponent;
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _attackableComponent = GetComponent<EnemyAttackableComponent>();
+    }
+
+    protected override void Start()
+    {
+        base.Start();
+
+        _player = MainPlayer.Instance;
+    }
+
     protected override void Move()
     {
-        MainPlayer player = MainPlayer.Instance;
-        Vector3 playerPosition = player.transform.position;
+        if (_attackableComponent && _attackableComponent.IsAttacking)
+        {
+            return;
+        }
+
+        Vector3 playerPosition = _player.transform.position;
         Vector3 thisPosition = transform.position;
 
         Vector3 directionVector = (playerPosition - thisPosition);
