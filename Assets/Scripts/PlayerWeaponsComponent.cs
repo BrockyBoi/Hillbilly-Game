@@ -5,7 +5,20 @@ using Weaponry;
 
 public enum UpgradeAttribute
 {
-    ProjectileSpeed, NumberOfProjectiles, ProjectileSize, FireRate, NumberOfEnemiesCanPassThrough, Damage, Duration, PickupRange, MovementSpeed, ProjectileArcCount, XPMultiplier, MaxHealthMultiplier, AllStatusEffectDamageMultiplier, KnockbackMultiplier
+    ProjectileSpeed, 
+    NumberOfProjectiles, 
+    ProjectileSize, 
+    FireRate, 
+    NumberOfEnemiesCanPassThrough,
+    Damage, 
+    Duration, 
+    PickupRange, 
+    MovementSpeed,
+    ProjectileArcCount, 
+    XPMultiplier, 
+    MaxHealthMultiplier, 
+    AllStatusEffectDamageMultiplier, 
+    KnockbackMultiplier
 }
 
 public class PlayerWeaponsComponent : MonoBehaviour

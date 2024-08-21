@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Weaponry;
 
-class UpgradeAttributeAmounts
+class ScalableAttributeValue
 {
     public float FlatAmount;
     public float MultiplierAmount;
@@ -16,7 +16,7 @@ class UpgradeAttributeAmounts
 
 public class UpgradeAttributesComponent
 {
-    private Dictionary<UpgradeAttribute, UpgradeAttributeAmounts> _upgradeAttributes = new Dictionary<UpgradeAttribute, UpgradeAttributeAmounts>();
+    private Dictionary<UpgradeAttribute, ScalableAttributeValue> _upgradeAttributes = new Dictionary<UpgradeAttribute, ScalableAttributeValue>();
 
     public delegate void EOnAttributeChange(UpgradeAttribute attribute, float value);
     public event EOnAttributeChange OnAttributeChanged;
@@ -25,7 +25,7 @@ public class UpgradeAttributesComponent
     {
         CheckAttributeValidity(attribute);
 
-        UpgradeAttributeAmounts attributeAmounts = _upgradeAttributes[attribute];
+        ScalableAttributeValue attributeAmounts = _upgradeAttributes[attribute];
         float modifiedAttributeValue = 0;
         if (shouldIncrement)
         {
@@ -80,7 +80,7 @@ public class UpgradeAttributesComponent
     {
         if (!_upgradeAttributes.ContainsKey(attributeType))
         {
-            UpgradeAttributeAmounts amounts = new UpgradeAttributeAmounts()
+            ScalableAttributeValue amounts = new ScalableAttributeValue()
             {
                 FlatAmount = 0,
                 MultiplierAmount = 1

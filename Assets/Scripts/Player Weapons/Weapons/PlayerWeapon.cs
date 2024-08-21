@@ -8,10 +8,17 @@ using XP;
 
 namespace Weaponry
 {
+    public enum EBodyWeaponType
+    {
+        Head, Body, Feet
+    }
+
     [Serializable]
     public struct WeaponData
     {
         public string WeaponID;
+
+        public EBodyWeaponType BodyWeaponType;
 
         [Range(.05f, 20f)]
         public float DefaultFireRate;
@@ -28,8 +35,6 @@ namespace Weaponry
         public GameObject ProjectilePrefab;
 
         public ProjectileData DefaultProjectileData;
-
-        public List<WeaponUpgradeData> WeaponUpgrades;
     }
 
     [RequireComponent(typeof(WeaponXPComponent))]
@@ -54,6 +59,10 @@ namespace Weaponry
 
         protected UpgradeAttributesComponent _attributesComponent = new UpgradeAttributesComponent();
         public UpgradeAttributesComponent WeaponAttributesComponent { get { return _attributesComponent; } }
+
+        [SerializeField, Title("Weapon Upgrades")]
+        private List<PlayerAttributeModifier> _weaponUpgrades;
+        public List<PlayerAttributeModifier> WeaponUpgrades { get { return _weaponUpgrades; } }
 
         protected virtual void OnEnable()
         {

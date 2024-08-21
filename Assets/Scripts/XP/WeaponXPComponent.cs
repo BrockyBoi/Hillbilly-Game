@@ -7,19 +7,12 @@ using Weaponry;
 namespace XP
 {
     [Serializable]
-    public struct WeaponUpgradeData
+    public struct PlayerAttributeModifier
     {
-        public List<SingleUpgradeData> WeaponAttributes;
-    }
-
-    [Serializable]
-    public struct SingleUpgradeData
-    {
-        public UpgradeAttribute Attribute;
-        public float UpgradeAmount;
+        public UpgradeAttribute AttributeType;
+        public float AttributeAmount;
         public bool IsFlatAmount;
     }
-
 
     public class WeaponXPComponent : XPComponent
     {
@@ -40,21 +33,17 @@ namespace XP
             base.LevelUp();
 
             int upgradeIndex = _currentLevel - 1;
-            if (_owningWeapon.WeaponData.WeaponUpgrades.Count > upgradeIndex)
+            if (_owningWeapon.WeaponUpgrades.Count > upgradeIndex)
             {
                 Debug.Log("Weapon level: " + (upgradeIndex + 1));
-                WeaponUpgradeData upgradeData = _owningWeapon.WeaponData.WeaponUpgrades[upgradeIndex];
-                for (int i = 0; i < upgradeData.WeaponAttributes.Count; i++)
+                PlayerAttributeModifier upgradeData = _owningWeapon.WeaponUpgrades[upgradeIndex];
+                if (upgradeData.AttributeType == UpgradeAttribute.FireRate)
                 {
-                    SingleUpgradeData singleUpgrade = upgradeData.WeaponAttributes[i];
-                    if (singleUpgrade.Attribute == UpgradeAttribute.FireRate)
-                    {
-                        _owningWeapon.WeaponAttributesComponent.DecrementAttributeAmount(singleUpgrade.Attribute, singleUpgrade.IsFlatAmount, singleUpgrade.UpgradeAmount);
-                    }
-                    else
-                    {
-                        _owningWeapon.WeaponAttributesComponent.IncrementAttributeAmount(singleUpgrade.Attribute, singleUpgrade.IsFlatAmount, singleUpgrade.UpgradeAmount);
-                    }
+                    _owningWeapon.WeaponAttributesComponent.DecrementAttributeAmount(upgradeData.AttributeType, upgradeData.IsFlatAmount, upgradeData.AttributeAmount);
+                }
+                else
+                {
+                    _owningWeapon.WeaponAttributesComponent.IncrementAttributeAmount(upgradeData.AttributeType, upgradeData.IsFlatAmount, upgradeData.AttributeAmount);
                 }
             }
         }
