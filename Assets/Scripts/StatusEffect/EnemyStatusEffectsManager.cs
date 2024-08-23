@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace StatusEffects
 {
-    public class EnemyStatusEffectsManager : StatusEffectsManager
+    public class EnemyStatusEffectsManager : CharacterStatusEffectsManager
     {
         protected override void Start()
         {

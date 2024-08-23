@@ -7,7 +7,7 @@ using Weaponry;
 namespace XP
 {
     [Serializable]
-    public struct PlayerAttributeModifier
+    public struct CharacterAttributeModifier
     {
         public UpgradeAttribute AttributeType;
         public float AttributeAmount;
@@ -36,7 +36,7 @@ namespace XP
             if (_owningWeapon.WeaponUpgrades.Count > upgradeIndex)
             {
                 Debug.Log("Weapon level: " + (upgradeIndex + 1));
-                PlayerAttributeModifier upgradeData = _owningWeapon.WeaponUpgrades[upgradeIndex];
+                CharacterAttributeModifier upgradeData = _owningWeapon.WeaponUpgrades[upgradeIndex];
                 if (upgradeData.AttributeType == UpgradeAttribute.FireRate)
                 {
                     _owningWeapon.WeaponAttributesComponent.DecrementAttributeAmount(upgradeData.AttributeType, upgradeData.IsFlatAmount, upgradeData.AttributeAmount);

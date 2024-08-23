@@ -7,14 +7,17 @@ public class MainPlayerMovementComponent : CharacterMovementComponent
     protected override void Move()
     {
         Vector3 directionVector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-        directionVector.Normalize();
-        MainPlayer player = _owningCharacter as MainPlayer;
+        if (directionVector != Vector3.zero)
+        {
+            directionVector.Normalize();
+            MainPlayer player = _owningCharacter as MainPlayer;
 
-        float movementSpeedModifier = player.UpgradeAttributesComponent.GetModifiedAttributeValue(UpgradeAttribute.MovementSpeed, _movementSpeed);
-        Vector3 moveVector = directionVector * Time.deltaTime * movementSpeedModifier;
-        transform.position = transform.position + moveVector;
+            float movementSpeedModifier = player.UpgradeAttributesComponent.GetModifiedAttributeValue(UpgradeAttribute.MovementSpeed, _movementSpeed);
+            Vector3 moveVector = directionVector * Time.deltaTime * movementSpeedModifier;
+            transform.position = transform.position + moveVector;
 
-        moveVector.Normalize();
-        _lastMovementVector = moveVector;
+            moveVector.Normalize();
+            _lastMovementVector = moveVector;
+        }
     }
 }

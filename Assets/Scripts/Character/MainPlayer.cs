@@ -15,8 +15,8 @@ public class MainPlayer : Character
     private PlayerWeaponsComponent _weaponsComponent;
     public PlayerWeaponsComponent WeaponsComponent { get { return _weaponsComponent; } }
 
-    private UpgradeAttributesComponent _upgradesAttributesComponent = new UpgradeAttributesComponent();
-    public UpgradeAttributesComponent UpgradeAttributesComponent { get { return _upgradesAttributesComponent; } }
+    private CharacterAttributesManager _upgradesAttributesComponent = new CharacterAttributesManager();
+    public CharacterAttributesManager UpgradeAttributesComponent { get { return _upgradesAttributesComponent; } }
 
     private PlayerXPComponent _playerXP;
     public PlayerXPComponent PlayerXPComponent { get { return _playerXP; } }

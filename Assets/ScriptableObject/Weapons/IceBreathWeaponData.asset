@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: IceBreath
+    BodyWeaponType: 0
     DefaultFireRate: 4
     MaxFireRate: 0.05
     NumberOfProjectilesToFire: 1
     TimeBetweenProjectiles: 0.1
+    WeaponPrefab: {fileID: 2119950409780851504, guid: 4341e78dc9d19fb4ca48314db634f8c9, type: 3}
     ProjectilePrefab: {fileID: 535457952690520844, guid: 67af527a5bd14b541a0ce3538cce9032, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
@@ -25,8 +27,11 @@ MonoBehaviour:
       DamageToDeal: 1
       TimeBetweenDamage: 1
       WeaponDuration: 0.2
+      CanKnockback: 0
+      KnockbackAmount: 0
+      KnockbackTime: 0
+      CanKnockbackIntoOtherEnemies: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades: []
+      ProjectileArcCount: 0

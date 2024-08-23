@@ -30,9 +30,10 @@ public class PlayerWeaponsComponent : MonoBehaviour
 
     private void Start()
     {
+        PlayerLoadout loadout = PlayerLoadout.Instance;
         foreach (PlayerWeapon weapon in GetComponentsInChildren<PlayerWeapon>())
         {
-            if (weapon)
+            if (weapon && loadout.ChosenWeapons.Contains(weapon.WeaponData))
             {
                 AddWeapon(weapon);
             }

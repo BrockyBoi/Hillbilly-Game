@@ -14,20 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: FireBreath
+    BodyWeaponType: 0
     DefaultFireRate: 2
     MaxFireRate: 0.05
     NumberOfProjectilesToFire: 1
     TimeBetweenProjectiles: 0.1
+    WeaponPrefab: {fileID: 2119950409780851504, guid: d3fd66f1873c54a4ea871b509fac7f6d, type: 3}
     ProjectilePrefab: {fileID: 535457952690520844, guid: 7f787b61307f44c4dae48ef4cf3a99c0, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
       ProjectileSizeMultiplier: 1
-      KnockbackAmount: 0
       DamageToDeal: 1
       TimeBetweenDamage: 2
       WeaponDuration: 0.75
+      CanKnockback: 0
+      KnockbackAmount: 0
+      KnockbackTime: 0
+      CanKnockbackIntoOtherEnemies: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades: []
+      ProjectileArcCount: 0

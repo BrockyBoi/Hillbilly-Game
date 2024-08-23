@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Weaponry;
+using XP;
 
 class ScalableAttributeValue
 {
@@ -14,9 +15,9 @@ class ScalableAttributeValue
     }
 }
 
-public class UpgradeAttributesComponent
+public class CharacterAttributesManager
 {
-    private Dictionary<UpgradeAttribute, ScalableAttributeValue> _upgradeAttributes = new Dictionary<UpgradeAttribute, ScalableAttributeValue>();
+    private Dictionary<UpgradeAttribute, ScalableAttributeValue> _characterAttributes = new Dictionary<UpgradeAttribute, ScalableAttributeValue>();
 
     public delegate void EOnAttributeChange(UpgradeAttribute attribute, float value);
     public event EOnAttributeChange OnAttributeChanged;
@@ -25,7 +26,7 @@ public class UpgradeAttributesComponent
     {
         CheckAttributeValidity(attribute);
 
-        ScalableAttributeValue attributeAmounts = _upgradeAttributes[attribute];
+        ScalableAttributeValue attributeAmounts = _characterAttributes[attribute];
         float modifiedAttributeValue = 0;
         if (shouldIncrement)
         {
@@ -43,21 +44,21 @@ public class UpgradeAttributesComponent
     {
         CheckAttributeValidity(attributeType);
 
-        return _upgradeAttributes[attributeType].GetTotalAmount();
+        return _characterAttributes[attributeType].GetTotalAmount();
     }
 
     public float GetFlatAttributeValue(UpgradeAttribute attributeType)
     {
         CheckAttributeValidity(attributeType);
 
-        return _upgradeAttributes[attributeType].FlatAmount;
+        return _characterAttributes[attributeType].FlatAmount;
     }
 
     public float GetMultiplierAttributeValue(UpgradeAttribute attributeType)
     {
         CheckAttributeValidity(attributeType);
 
-        return _upgradeAttributes[attributeType].MultiplierAmount;
+        return _characterAttributes[attributeType].MultiplierAmount;
     }
 
     public void SetAttributeAmount(UpgradeAttribute attributeType, bool isFlatValue, float newValue)
@@ -66,19 +67,19 @@ public class UpgradeAttributesComponent
 
         if (isFlatValue)
         {
-            _upgradeAttributes[attributeType].FlatAmount = newValue;
+            _characterAttributes[attributeType].FlatAmount = newValue;
         }
         else
         {
-            _upgradeAttributes[attributeType].MultiplierAmount = newValue;
+            _characterAttributes[attributeType].MultiplierAmount = newValue;
         }
 
-        OnAttributeChanged?.Invoke(attributeType, _upgradeAttributes[attributeType].GetTotalAmount());
+        OnAttributeChanged?.Invoke(attributeType, _characterAttributes[attributeType].GetTotalAmount());
     }
 
     private void CheckAttributeValidity(UpgradeAttribute attributeType)
     {
-        if (!_upgradeAttributes.ContainsKey(attributeType))
+        if (!_characterAttributes.ContainsKey(attributeType))
         {
             ScalableAttributeValue amounts = new ScalableAttributeValue()
             {
@@ -86,8 +87,21 @@ public class UpgradeAttributesComponent
                 MultiplierAmount = 1
             };
 
-            _upgradeAttributes.Add(attributeType, amounts);
+            _characterAttributes.Add(attributeType, amounts);
         }
+    }
+
+    public void AddTrait(CharacterTrait trait)
+    {
+        foreach (CharacterAttributeModifier attribute in trait.CharacterAttributes)
+        {
+            IncrementAttributeAmount(attribute);
+        }
+    }
+
+    public void IncrementAttributeAmount(CharacterAttributeModifier attributeModifier)
+    {
+        IncrementAttributeAmount(attributeModifier.AttributeType, attributeModifier.IsFlatAmount, attributeModifier.AttributeAmount);
     }
 
     public void IncrementAttributeAmount(UpgradeAttribute attributeType, bool isFlatValue, float amountToIncrement)

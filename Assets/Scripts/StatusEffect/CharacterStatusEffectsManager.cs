@@ -20,7 +20,7 @@ namespace StatusEffects
         }
     }
 
-    public class StatusEffectsManager : MonoBehaviour
+    public class CharacterStatusEffectsManager : MonoBehaviour
     {
         [SerializeField]
         protected List<StatusEffectScriptableObject> _allStatusEffectDatas;

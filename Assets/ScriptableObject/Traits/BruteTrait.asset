@@ -13,13 +13,11 @@ MonoBehaviour:
   m_Name: BruteTrait
   m_EditorClassIdentifier: 
   TraitName: Brute
-  PlayerUpgrades:
-  - Attribute: 5
-    UpgradeAmount: 1.5
-    IsFlatAmount: 0
-  - Attribute: 11
-    UpgradeAmount: 1.5
-    IsFlatAmount: 0
-  - Attribute: 13
-    UpgradeAmount: 1.25
-    IsFlatAmount: 0
+  Trait:
+    _characterAttributes:
+    - AttributeType: 5
+      AttributeAmount: 1.2
+      IsFlatAmount: 0
+    - AttributeType: 13
+      AttributeAmount: 2
+      IsFlatAmount: 0

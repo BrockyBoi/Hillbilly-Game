@@ -14,35 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: BeamProjectile
+    BodyWeaponType: 0
     DefaultFireRate: 1
     MaxFireRate: 1
     NumberOfProjectilesToFire: 1
     TimeBetweenProjectiles: 0.2
+    WeaponPrefab: {fileID: 2849409728609278984, guid: c75c563a9d7d20c4dba06ed048915ebe, type: 3}
     ProjectilePrefab: {fileID: 1336623067824754481, guid: 8e152809b50820c4c984f03ccc05f056, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
       ProjectileSizeMultiplier: 2
-      DamageToDeal: 25
+      DamageToDeal: 17.5
       TimeBetweenDamage: 1
       WeaponDuration: 2
+      CanKnockback: 0
+      KnockbackAmount: 0
+      KnockbackTime: 0
+      CanKnockbackIntoOtherEnemies: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
       CanWeaponArc: 1
-    WeaponUpgrades:
-    - WeaponAttributes: 06000000
-      AttributeAmounts:
-      - 2
-    - WeaponAttributes: 0900000002000000
-      AttributeAmounts:
-      - 1
-      - 1
-    - WeaponAttributes: 05000000
-      AttributeAmounts:
-      - 10
-    - WeaponAttributes: 01000000
-      AttributeAmounts:
-      - 1
-    - WeaponAttributes: 01000000
-      AttributeAmounts:
-      - 1
+      ProjectileArcCount: 0

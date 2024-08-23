@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using StatusEffects;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public abstract class CharacterMovementComponent : MonoBehaviour
 {
@@ -16,17 +15,14 @@ public abstract class CharacterMovementComponent : MonoBehaviour
     protected Vector2 _lastMovementVector = Vector2.zero;
     public Vector2 LastMovementVector { get { return _lastMovementVector; } }
 
-    protected Vector2 _knockbackVector = Vector2.zero;
-    protected bool _canKnockbackDamage = false;
-
     protected bool _isBeingKnockedBack = false;
     public bool IsBeingKnockedBack { get { return _isBeingKnockedBack; } }
 
-    protected StatusEffectsManager _owningCharacterStatusEffectManager;
+    protected CharacterStatusEffectsManager _owningCharacterStatusEffectManager;
 
     protected virtual void Awake()
     {
-        _owningCharacterStatusEffectManager = GetComponent<StatusEffectsManager>();
+        _owningCharacterStatusEffectManager = GetComponent<CharacterStatusEffectsManager>();
 
         _owningCharacter = GetComponent<Character>();
     }
@@ -74,34 +70,32 @@ public abstract class CharacterMovementComponent : MonoBehaviour
         _movementSpeedModifier = speedModifier;
     }
 
-    public void AddKnockback(Vector3 knockbackDirection, bool canKnockbackDamage = false)
+    public void AddKnockback(Vector3 knockbackDirection, float knockbackTime, bool canKnockbackDamage = false)
     {
-        _knockbackVector = knockbackDirection;
-        _canKnockbackDamage = canKnockbackDamage;
+        if (_isBeingKnockedBack)
+        {
+            return;
+        }
 
         if (_owningCharacter.IsAlive())
         {
-            StartCoroutine(KnockBackCoroutine());
+            StartCoroutine(KnockBackCoroutine(knockbackDirection, knockbackTime, canKnockbackDamage));
         }
     }
 
-    protected IEnumerator KnockBackCoroutine()
+    protected IEnumerator KnockBackCoroutine(Vector3 knockbackDirection, float knockbackTime, bool canKnockbackDamage)
     {
         _isBeingKnockedBack = true;
 
-        float timeToKnockBack = .35f;
         float currentTime = 0;
 
-        bool canKnockbackDamage = _canKnockbackDamage;
-
-        Vector3 knockback = GetPotentialKnockback();
         Vector3 startPos = transform.position;
-        Vector3 endPos = startPos + knockback;
-        while (currentTime < timeToKnockBack)
+        Vector3 endPos = startPos + knockbackDirection;
+        while (currentTime < knockbackTime)
         {
             currentTime += Time.deltaTime;
 
-            Vector3 nextPos = Vector3.Lerp(startPos, endPos, currentTime / timeToKnockBack);
+            Vector3 nextPos = Vector3.Lerp(startPos, endPos, currentTime / knockbackTime);
             if (canKnockbackDamage)
             {
                 Vector2 dir = transform.position - nextPos;
@@ -114,7 +108,7 @@ public abstract class CharacterMovementComponent : MonoBehaviour
                     {
                         Vector3 enemyHitDir = transform.position - enemy.transform.position;
                         enemyHitDir.Normalize();
-                        enemy.CharacterMovementComponent.AddKnockback(enemyHitDir * knockback.magnitude * .5f);
+                        enemy.CharacterMovementComponent.AddKnockback(enemyHitDir * knockbackDirection.magnitude * .5f, knockbackTime / 2);
                     }
                 }
             }
@@ -125,19 +119,6 @@ public abstract class CharacterMovementComponent : MonoBehaviour
         }
 
         _isBeingKnockedBack = false;
-    }
-
-    protected Vector2 GetPotentialKnockback()
-    {
-        Vector2 knockbackVector = Vector2.zero;
-        if (_knockbackVector !=  Vector2.zero)
-        {
-            knockbackVector = _knockbackVector;
-            _knockbackVector = Vector2.zero;
-            _canKnockbackDamage = false;
-        }
-
-        return knockbackVector;
     }
 
     protected void RotateCharacter()

@@ -14,21 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: Punch
+    BodyWeaponType: 0
     DefaultFireRate: 4
     MaxFireRate: 0.05
     NumberOfProjectilesToFire: 1
     TimeBetweenProjectiles: 0.1
+    WeaponPrefab: {fileID: 3437424706744741715, guid: c015114be23bc444e835e4382e75ce80, type: 3}
     ProjectilePrefab: {fileID: 535457952690520844, guid: 27b82a6496e410c4baccc7138736b277, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
-      ProjectileSizeMultiplier: 1
-      KnockbackAmount: 6
-      CanKnockbackIntoOtherEnemies: 1
+      ProjectileSizeMultiplier: 3
       DamageToDeal: 40
       TimeBetweenDamage: 2
       WeaponDuration: 0.5
+      CanKnockback: 1
+      KnockbackAmount: 6
+      KnockbackTime: 1
+      CanKnockbackIntoOtherEnemies: 1
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades: []
+      ProjectileArcCount: 0

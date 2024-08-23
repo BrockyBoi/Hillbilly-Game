@@ -13,10 +13,17 @@ MonoBehaviour:
   m_Name: GunPersonTrait
   m_EditorClassIdentifier: 
   TraitName: GunPerson
-  PlayerUpgrades:
-  - AttributeType: 0
-    AttributeAmount: 0
-    IsFlatAmount: 1
-  - AttributeType: 0
-    AttributeAmount: 0
-    IsFlatAmount: 0
+  Trait:
+    _characterAttributes:
+    - AttributeType: 0
+      AttributeAmount: 2
+      IsFlatAmount: 0
+    - AttributeType: 1
+      AttributeAmount: 2
+      IsFlatAmount: 1
+    - AttributeType: 3
+      AttributeAmount: 0.8
+      IsFlatAmount: 0
+    - AttributeType: 4
+      AttributeAmount: 1
+      IsFlatAmount: 1

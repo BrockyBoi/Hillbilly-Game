@@ -16,10 +16,13 @@ namespace Weaponry
     [Serializable]
     public struct WeaponData
     {
+        [Title("Weapon Name")]
         public string WeaponID;
 
+        [Title("Body Part")]
         public EBodyWeaponType BodyWeaponType;
 
+        [Title("Weapon Stats")]
         [Range(.05f, 20f)]
         public float DefaultFireRate;
 
@@ -32,8 +35,12 @@ namespace Weaponry
         [Range(.05f, 1)]
         public float TimeBetweenProjectiles;
 
+        [Title("Weapon Prefabs")]
+        public GameObject WeaponPrefab;
+
         public GameObject ProjectilePrefab;
 
+        [Title("Projectile Data")]
         public ProjectileData DefaultProjectileData;
     }
 
@@ -57,12 +64,12 @@ namespace Weaponry
         protected PoolableObjectsComponent<BaseProjectile> _projectilePool = new PoolableObjectsComponent<BaseProjectile>();
         public PoolableObjectsComponent<BaseProjectile> ProjectilePool { get { return _projectilePool; } }
 
-        protected UpgradeAttributesComponent _attributesComponent = new UpgradeAttributesComponent();
-        public UpgradeAttributesComponent WeaponAttributesComponent { get { return _attributesComponent; } }
+        protected CharacterAttributesManager _attributesComponent = new CharacterAttributesManager();
+        public CharacterAttributesManager WeaponAttributesComponent { get { return _attributesComponent; } }
 
         [SerializeField, Title("Weapon Upgrades")]
-        private List<PlayerAttributeModifier> _weaponUpgrades;
-        public List<PlayerAttributeModifier> WeaponUpgrades { get { return _weaponUpgrades; } }
+        private List<CharacterAttributeModifier> _weaponUpgrades;
+        public List<CharacterAttributeModifier> WeaponUpgrades { get { return _weaponUpgrades; } }
 
         protected virtual void OnEnable()
         {
@@ -110,6 +117,8 @@ namespace Weaponry
             float weaponSize =  GetAllAttributeValues(UpgradeAttribute.ProjectileSize, WeaponData.DefaultProjectileData.ProjectileSizeMultiplier);
             float damageAmount = GetAllAttributeValues(UpgradeAttribute.Damage, WeaponData.DefaultProjectileData.DamageToDeal);
             float knockbackAmount = GetAllAttributeValues(UpgradeAttribute.KnockbackMultiplier, WeaponData.DefaultProjectileData.KnockbackAmount);
+            bool canKnockBack = WeaponData.DefaultProjectileData.CanKnockback;
+            float knockBackTiming = WeaponData.DefaultProjectileData.KnockbackTime;
             bool canKnockbackIntoOtherEnemies = WeaponData.DefaultProjectileData.CanKnockbackIntoOtherEnemies;
             float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
             float weaponDuration =  GetAllAttributeValues(UpgradeAttribute.Duration, WeaponData.DefaultProjectileData.WeaponDuration);
@@ -118,7 +127,10 @@ namespace Weaponry
             bool canArc = WeaponData.DefaultProjectileData.CanWeaponArc;
             int arcCount = WeaponData.DefaultProjectileData.ProjectileArcCount;
 
-            return new ProjectileData(weaponSpeed, weaponSize, knockbackAmount, canKnockbackIntoOtherEnemies, damageAmount, timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, canPassThroughUnlimitedEnemies, canArc, arcCount);
+            return new ProjectileData(weaponSpeed, weaponSize, canKnockBack,
+                knockbackAmount, knockBackTiming, canKnockbackIntoOtherEnemies, damageAmount, 
+                timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, 
+                canPassThroughUnlimitedEnemies, canArc, arcCount);
         }
 
         protected float GetAllAttributeValues(UpgradeAttribute upgradeAttribute, float defaultValue, bool shouldIncrement = true)

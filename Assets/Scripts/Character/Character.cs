@@ -7,7 +7,7 @@ using XP;
 
 [RequireComponent(typeof(CharacterHealthComponent))]
 [RequireComponent(typeof(BoxCollider2D))]
-[RequireComponent(typeof(StatusEffectsManager))]
+[RequireComponent(typeof(CharacterStatusEffectsManager))]
 public abstract class Character : MonoBehaviour
 {
     protected CharacterHealthComponent _healthComponent;
@@ -19,15 +19,15 @@ public abstract class Character : MonoBehaviour
     public SpriteRenderer SpriteRenderer { get { return _spriteRenderer; } }
     protected BoxCollider2D _boxCollider;
 
-    protected StatusEffectsManager _statusEffectsManager;
-    public StatusEffectsManager StatusEffectsManager { get { return _statusEffectsManager; } }
+    protected CharacterStatusEffectsManager _statusEffectsManager;
+    public CharacterStatusEffectsManager StatusEffectsManager { get { return _statusEffectsManager; } }
     // Start is called before the first frame update
     protected virtual void Awake()
     {
         _healthComponent = GetComponent<CharacterHealthComponent>();
         _characterMovementComponent = GetComponent<CharacterMovementComponent>();
         _boxCollider = GetComponent<BoxCollider2D>();
-        _statusEffectsManager = GetComponent<StatusEffectsManager>();
+        _statusEffectsManager = GetComponent<CharacterStatusEffectsManager>();
 
         if (_healthComponent == null)
         {

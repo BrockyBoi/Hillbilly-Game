@@ -19,32 +19,38 @@ public enum EBasePlayerStats
 public class StatModifierData
 {
     public int CurrentLevel;
-    public PlayerAttributeModifier DefaultModifierPerLevel;
+    public CharacterAttributeModifier DefaultModifierPerLevel;
     public SpecialAttributesAtGivenPointData SpecialAttributesAtGivenPointValues;
 }
 
 [System.Serializable]
 public struct SpecialAttributesAtGivenPointData
 {
-    public List<PlayerAttributeModifier> AttributeDatas;
+    public List<CharacterAttributeModifier> AttributeDatas;
     public List<int> IndexOfAttribute;
 }
 
 public class PlayerLoadout : MonoBehaviour
 {
+    public static PlayerLoadout Instance { get; private set; }
+
     [SerializeField]
     private int _defaultStatLevel = 5;
 
-    List<WeaponData> _chosenWeapons = new List<WeaponData>();
+    [SerializeField]
+    private List<WeaponData> _chosenWeapons = new List<WeaponData>();
     public List<WeaponData> ChosenWeapons {  get { return _chosenWeapons; } }
 
-    List<PlayerTrait> _chosenTraits = new List<PlayerTrait>();
-    public List<PlayerTrait> ChosenTraits { get {  return _chosenTraits; } }
+    [SerializeField]
+    private List<CharacterTrait> _chosenTraits = new List<CharacterTrait>();
+    public List<CharacterTrait> ChosenTraits { get {  return _chosenTraits; } }
 
     private Dictionary<EBasePlayerStats, StatModifierData> _playerStats = new Dictionary<EBasePlayerStats, StatModifierData>();
 
     private void Awake()
     {
+        Instance = this;
+
         DontDestroyOnLoad(this);
         for (EBasePlayerStats stat = EBasePlayerStats.Health; stat < EBasePlayerStats.COUNT; stat++)
         {
@@ -66,7 +72,7 @@ public class PlayerLoadout : MonoBehaviour
         }
     }
 
-    public void ToggleTrait(PlayerTrait trait)
+    public void ToggleTrait(CharacterTrait trait)
     {
         bool hasTrait = _chosenTraits.Contains(trait);
         if (!hasTrait)
@@ -82,5 +88,20 @@ public class PlayerLoadout : MonoBehaviour
     public StatModifierData GetPlayerStat(EBasePlayerStats stat)
     {
         return _playerStats[stat];
+    }
+
+    public void IncrementCharacterStatLevel(EBasePlayerStats stat)
+    {
+        SetCharacterStatLevel(stat, _playerStats[stat].CurrentLevel + 1);
+    }
+
+    public void DecreaseCharacterStatLevel(EBasePlayerStats stat)
+    {
+        SetCharacterStatLevel(stat, _playerStats[stat].CurrentLevel - 1);
+    }
+
+    public void SetCharacterStatLevel(EBasePlayerStats stat, int value)
+    {
+        _playerStats[stat].CurrentLevel = Mathf.Clamp(value, 0, 10);
     }
 }

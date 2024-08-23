@@ -14,49 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: SMGWeapon
+    BodyWeaponType: 0
     DefaultFireRate: 1
     MaxFireRate: 0.05
     NumberOfProjectilesToFire: 3
     TimeBetweenProjectiles: 0.2
+    WeaponPrefab: {fileID: 1159786638284818361, guid: 59361afafc7f28b428afa64aeb3798d9, type: 3}
     ProjectilePrefab: {fileID: 1336623067824754481, guid: 22173777cf11f3f4c8f99dbcabf0fba2, type: 3}
     DefaultProjectileData:
-      ProjectileSpeed: 2
+      ProjectileSpeed: 7
       ProjectileSizeMultiplier: 1
-      KnockbackAmount: 0.1
       DamageToDeal: 10
       TimeBetweenDamage: 0.195
       WeaponDuration: 0
+      CanKnockback: 1
+      KnockbackAmount: 0.2
+      KnockbackTime: 0.075
+      CanKnockbackIntoOtherEnemies: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 0
-      ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades:
-    - WeaponAttributes:
-      - Attribute: 3
-        UpgradeAmount: 0.3
-        IsFlatAmount: 1
-      - Attribute: 2
-        UpgradeAmount: 1.1
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 4
-        UpgradeAmount: 1
-        IsFlatAmount: 1
-      - Attribute: 0
-        UpgradeAmount: 1.5
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 5
-        UpgradeAmount: 1.5
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 1
-        UpgradeAmount: 2
-        IsFlatAmount: 1
-    - WeaponAttributes:
-      - Attribute: 0
-        UpgradeAmount: 1.5
-        IsFlatAmount: 0
-      - Attribute: 13
-        UpgradeAmount: 2
-        IsFlatAmount: 0
+      ProjectileArcCount: 0

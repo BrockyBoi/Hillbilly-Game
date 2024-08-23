@@ -11,16 +11,12 @@ namespace Weaponry
     [Serializable]
     public struct ProjectileData
     {
+        [Title("Base Stats")]
         [Range(1, 10)]
         public float ProjectileSpeed;
 
         [Range(1, 5)]
         public float ProjectileSizeMultiplier;
-
-        [Range(0, 100)]
-        public float KnockbackAmount;
-
-        public bool CanKnockbackIntoOtherEnemies;
 
         [Range(0, 1000)]
         public float DamageToDeal;
@@ -31,17 +27,34 @@ namespace Weaponry
         [Range(0f, 10)]
         public float WeaponDuration;
 
+        [Title("Knockback")]
+        public bool CanKnockback;
+
+        [ShowIf("CanKnockback")]
+        [Range(0, 100)]
+        public float KnockbackAmount;
+
+        [ShowIf("CanKnockback")]
+        [Range(0, 5)]
+        public float KnockbackTime;
+
+        [ShowIf("CanKnockback")]
+        public bool CanKnockbackIntoOtherEnemies;
+
+        [Title("Pass Through Enemies")]
         [Range(0, 10)]
         public int NumberOfEnemiesCanPassThrough;
 
         public bool CanPassThroughUnlimitedEnemies;
 
+        [Title("Weapon Arc")]
+        public bool CanWeaponArc;
+
+        [ShowIf("CanWeaponArc")]
         [Range(0, 50)]
         public int ProjectileArcCount;
 
-        public bool CanWeaponArc;
-
-        public ProjectileData(float speed, float sizeMultiplier, float knockbackAmount, bool canKnockbackIntoOtherEnemies, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount)
+        public ProjectileData(float speed, float sizeMultiplier, bool canKnockBack, float knockbackAmount, float knockBackTiming, bool canKnockbackIntoOtherEnemies, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount)
         {
             this.ProjectileSpeed = speed;
             this.ProjectileSizeMultiplier = sizeMultiplier;
@@ -52,8 +65,12 @@ namespace Weaponry
             this.CanPassThroughUnlimitedEnemies = canPassThroughUnlimitedEnemies;
             this.CanWeaponArc = canWeaponArc;
             this.ProjectileArcCount = arcCount;
+
+            // Knockback
             this.KnockbackAmount = knockbackAmount;
             this.CanKnockbackIntoOtherEnemies = canKnockbackIntoOtherEnemies;
+            this.KnockbackTime = knockBackTiming;
+            this.CanKnockback = canKnockBack;
         }
     }
 
@@ -211,17 +228,17 @@ namespace Weaponry
         {
             if (enemy)
             {
-                if (_projectileData.KnockbackAmount > 0)
+                if (_projectileData.CanKnockback && _projectileData.KnockbackAmount > 0)
                 {
                     Vector2 knockbackDirection = enemy.transform.position - _weapon.OwningPlayer.transform.position;
                     knockbackDirection.Normalize();
                     knockbackDirection *= _projectileData.KnockbackAmount;
-                    enemy.CharacterMovementComponent.AddKnockback(knockbackDirection);
+                    enemy.CharacterMovementComponent.AddKnockback(knockbackDirection, _projectileData.KnockbackTime);
                 }
 
                 foreach (StatusEffectAttackData statusEffectAttack in _statusEffectsToApply)
                 {
-                    StatusEffectsManager statusEffectsManager = enemy.StatusEffectsManager;
+                    CharacterStatusEffectsManager statusEffectsManager = enemy.StatusEffectsManager;
                     if (statusEffectsManager)
                     {
                         statusEffectsManager.IncrementStacks(statusEffectAttack.EffectType, statusEffectAttack.StacksToAdd);

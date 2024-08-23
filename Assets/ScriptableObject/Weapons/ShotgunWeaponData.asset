@@ -14,41 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: ShotgunWeapon
+    BodyWeaponType: 1
     DefaultFireRate: 4
     MaxFireRate: 1
     NumberOfProjectilesToFire: 4
     TimeBetweenProjectiles: 0.2
+    WeaponPrefab: {fileID: 1159786638284818361, guid: 55c9d8f4e5c10cb4bb5977a2d9764567, type: 3}
     ProjectilePrefab: {fileID: 1336623067824754481, guid: 22173777cf11f3f4c8f99dbcabf0fba2, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 6
       ProjectileSizeMultiplier: 2
-      KnockbackAmount: 0
-      CanKnockbackIntoOtherEnemies: 0
       DamageToDeal: 10
       TimeBetweenDamage: 0.195
       WeaponDuration: 4
+      CanKnockback: 1
+      KnockbackAmount: 5
+      KnockbackTime: 0.5
+      CanKnockbackIntoOtherEnemies: 1
       NumberOfEnemiesCanPassThrough: 0
-      CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
+      CanPassThroughUnlimitedEnemies: 0
       CanWeaponArc: 0
-    WeaponUpgrades:
-    - WeaponAttributes:
-      - Attribute: 1
-        UpgradeAmount: 1
-        IsFlatAmount: 1
-    - WeaponAttributes:
-      - Attribute: 4
-        UpgradeAmount: 2
-        IsFlatAmount: 1
-    - WeaponAttributes:
-      - Attribute: 2
-        UpgradeAmount: 1.05
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 0
-        UpgradeAmount: 1.25
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 5
-        UpgradeAmount: 1.5
-        IsFlatAmount: 0
+      ProjectileArcCount: 0

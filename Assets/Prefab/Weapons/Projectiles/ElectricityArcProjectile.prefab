@@ -202,7 +202,9 @@ LineRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Positions: []
+  m_Positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 10, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -278,6 +280,6 @@ MonoBehaviour:
   - EffectType: 3
     StacksToAdd: 10
   _maxDistanceFromPlayerBeforeDestroy: 1000
-  _defaultBeamWidth: 1
+  _defaultBeamWidth: 0.1
   _visualWidthModifier: 0.75
   _beamColor: {r: 1, g: 0.8873908, b: 0, a: 1}

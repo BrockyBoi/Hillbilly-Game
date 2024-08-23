@@ -14,40 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: LingeringFire
+    BodyWeaponType: 0
     DefaultFireRate: 3
     MaxFireRate: 0.05
     NumberOfProjectilesToFire: 5
     TimeBetweenProjectiles: 0.75
+    WeaponPrefab: {fileID: 2119950409780851504, guid: 91034c79df00f5246bdc92551ba9670e, type: 3}
     ProjectilePrefab: {fileID: 535457952690520844, guid: 85553ae540e20514da03ebde534aa796, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
       ProjectileSizeMultiplier: 1
-      KnockbackAmount: 0
-      CanKnockbackIntoOtherEnemies: 0
       DamageToDeal: 5
       TimeBetweenDamage: 0.01
       WeaponDuration: 4
+      CanKnockback: 0
+      KnockbackAmount: 0
+      KnockbackTime: 0
+      CanKnockbackIntoOtherEnemies: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades:
-    - WeaponAttributes:
-      - Attribute: 2
-        UpgradeAmount: 1.2
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 1
-        UpgradeAmount: 2
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 5
-        UpgradeAmount: 5
-        IsFlatAmount: 1
-    - WeaponAttributes:
-      - Attribute: 2
-        UpgradeAmount: 1.2
-        IsFlatAmount: 0
-      - Attribute: 6
-        UpgradeAmount: 1
-        IsFlatAmount: 1
+      ProjectileArcCount: 0

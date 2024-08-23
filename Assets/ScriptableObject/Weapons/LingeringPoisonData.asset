@@ -14,40 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WeaponData:
     WeaponID: LingeringPoison
+    BodyWeaponType: 0
     DefaultFireRate: 5
     MaxFireRate: 1
     NumberOfProjectilesToFire: 1
     TimeBetweenProjectiles: 1
+    WeaponPrefab: {fileID: 2119950409780851504, guid: 4d77745d2036ca9498a42875381936cb, type: 3}
     ProjectilePrefab: {fileID: 535457952690520844, guid: bd2da8c76ff361546b418218afd8e04f, type: 3}
     DefaultProjectileData:
       ProjectileSpeed: 1
       ProjectileSizeMultiplier: 1
-      KnockbackAmount: 0
-      CanKnockbackIntoOtherEnemies: 0
       DamageToDeal: 0
       TimeBetweenDamage: 0.25
       WeaponDuration: 6
+      CanKnockback: 0
+      KnockbackAmount: 0
+      KnockbackTime: 0
+      CanKnockbackIntoOtherEnemies: 0
       NumberOfEnemiesCanPassThrough: 0
       CanPassThroughUnlimitedEnemies: 1
-      ProjectileArcCount: 0
       CanWeaponArc: 0
-    WeaponUpgrades:
-    - WeaponAttributes:
-      - Attribute: 2
-        UpgradeAmount: 1.2
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 1
-        UpgradeAmount: 2
-        IsFlatAmount: 0
-    - WeaponAttributes:
-      - Attribute: 5
-        UpgradeAmount: 20
-        IsFlatAmount: 1
-    - WeaponAttributes:
-      - Attribute: 2
-        UpgradeAmount: 1.2
-        IsFlatAmount: 0
-      - Attribute: 6
-        UpgradeAmount: 1
-        IsFlatAmount: 1
+      ProjectileArcCount: 0

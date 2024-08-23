@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: ElementalistTrait
   m_EditorClassIdentifier: 
   TraitName: Elementalist
-  PlayerUpgrades:
-  - Attribute: 12
-    UpgradeAmount: 2
-    IsFlatAmount: 0
-  - Attribute: 8
-    UpgradeAmount: 0.5
-    IsFlatAmount: 0
+  Trait:
+    _characterAttributes:
+    - AttributeType: 12
+      AttributeAmount: 2
+      IsFlatAmount: 0
+    - AttributeType: 9
+      AttributeAmount: 2
+      IsFlatAmount: 1

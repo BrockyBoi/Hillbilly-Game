@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: GiantTrait
   m_EditorClassIdentifier: 
   TraitName: Giant
-  PlayerUpgrades:
-  - Attribute: 11
-    UpgradeAmount: 3
-    IsFlatAmount: 0
-  - Attribute: 8
-    UpgradeAmount: 0.5
-    IsFlatAmount: 0
-  - Attribute: 13
-    UpgradeAmount: 3
-    IsFlatAmount: 0
+  Trait:
+    _characterAttributes:
+    - AttributeType: 11
+      AttributeAmount: 5
+      IsFlatAmount: 0
+    - AttributeType: 5
+      AttributeAmount: 2
+      IsFlatAmount: 0
+    - AttributeType: 8
+      AttributeAmount: 0.3
+      IsFlatAmount: 0
+    - AttributeType: 2
+      AttributeAmount: 1.5
+      IsFlatAmount: 0

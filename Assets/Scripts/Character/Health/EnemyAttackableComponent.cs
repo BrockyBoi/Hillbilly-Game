@@ -45,6 +45,7 @@ public class EnemyAttackableComponent : MonoBehaviour
     private void OnEnemyKilled(Character enemyKilled)
     {
         StopAllCoroutines();
+        _isAttacking = false;
     }
 
     public void AttackPlayer(MainPlayer playerToAttack)
