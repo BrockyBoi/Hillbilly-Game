@@ -113,24 +113,39 @@ namespace Weaponry
 
         protected ProjectileData GetCurrentProjectileData()
         {
+            // Base Stats
             float weaponSpeed =  GetAllAttributeValues(UpgradeAttribute.ProjectileSpeed, WeaponData.DefaultProjectileData.ProjectileSpeed);
             float weaponSize =  GetAllAttributeValues(UpgradeAttribute.ProjectileSize, WeaponData.DefaultProjectileData.ProjectileSizeMultiplier);
             float damageAmount = GetAllAttributeValues(UpgradeAttribute.Damage, WeaponData.DefaultProjectileData.DamageToDeal);
-            float knockbackAmount = GetAllAttributeValues(UpgradeAttribute.KnockbackMultiplier, WeaponData.DefaultProjectileData.KnockbackAmount);
+            float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
+
+            // Duration
+            float weaponDuration = GetAllAttributeValues(UpgradeAttribute.Duration, WeaponData.DefaultProjectileData.WeaponDuration);
+
+            // Knockback
             bool canKnockBack = WeaponData.DefaultProjectileData.CanKnockback;
+            float knockbackAmount = GetAllAttributeValues(UpgradeAttribute.KnockbackMultiplier, WeaponData.DefaultProjectileData.KnockbackAmount);
             float knockBackTiming = WeaponData.DefaultProjectileData.KnockbackTime;
             bool canKnockbackIntoOtherEnemies = WeaponData.DefaultProjectileData.CanKnockbackIntoOtherEnemies;
-            float timeBetweenDamage = WeaponData.DefaultProjectileData.TimeBetweenDamage;
-            float weaponDuration =  GetAllAttributeValues(UpgradeAttribute.Duration, WeaponData.DefaultProjectileData.WeaponDuration);
+
+
+            // Pass through
             int numberOfEnemiesToPassThrough = (int)GetAllAttributeValues(UpgradeAttribute.NumberOfEnemiesCanPassThrough, WeaponData.DefaultProjectileData.NumberOfEnemiesCanPassThrough);
             bool canPassThroughUnlimitedEnemies = WeaponData.DefaultProjectileData.CanPassThroughUnlimitedEnemies;
+
+            // Arc
             bool canArc = WeaponData.DefaultProjectileData.CanWeaponArc;
             int arcCount = WeaponData.DefaultProjectileData.ProjectileArcCount;
+
+            // Explosion
+            bool canExplode = WeaponData.DefaultProjectileData.CanProjectileExplode;
+            GameObject explosionPrefab = WeaponData.DefaultProjectileData.ExplosionPrefab;
 
             return new ProjectileData(weaponSpeed, weaponSize, canKnockBack,
                 knockbackAmount, knockBackTiming, canKnockbackIntoOtherEnemies, damageAmount, 
                 timeBetweenDamage, weaponDuration, numberOfEnemiesToPassThrough, 
-                canPassThroughUnlimitedEnemies, canArc, arcCount);
+                canPassThroughUnlimitedEnemies, canArc, arcCount,
+                canExplode, explosionPrefab);
         }
 
         protected float GetAllAttributeValues(UpgradeAttribute upgradeAttribute, float defaultValue, bool shouldIncrement = true)

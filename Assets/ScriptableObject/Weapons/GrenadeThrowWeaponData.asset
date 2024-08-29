@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab577aecc7261f1418ab61caafe7bbde, type: 3}
+  m_Name: GrenadeThrowWeaponData
+  m_EditorClassIdentifier: 
+  WeaponData:
+    WeaponID: GrenadeThrow
+    BodyWeaponType: 0
+    DefaultFireRate: 4
+    MaxFireRate: 0.05
+    NumberOfProjectilesToFire: 2
+    TimeBetweenProjectiles: 0.75
+    WeaponPrefab: {fileID: 1159786638284818361, guid: 08fe89696bfdbcf40b61dc3f4987e189, type: 3}
+    ProjectilePrefab: {fileID: 1336623067824754481, guid: 58a663eeec956074ea1fd6d6ccdc4bb9, type: 3}
+    DefaultProjectileData:
+      ProjectileSpeed: 7
+      ProjectileSizeMultiplier: 1
+      DamageToDeal: 50
+      TimeBetweenDamage: 1
+      WeaponDuration: 0.125
+      CanKnockback: 1
+      KnockbackAmount: 6
+      KnockbackTime: 2.5
+      CanKnockbackIntoOtherEnemies: 1
+      NumberOfEnemiesCanPassThrough: 0
+      CanPassThroughUnlimitedEnemies: 1
+      CanWeaponArc: 0
+      ProjectileArcCount: 0
+      CanProjectileExplode: 1
+      ExplosionPrefab: {fileID: 1336623067824754481, guid: b24c2747cf94d3843bdac91a18442160, type: 3}

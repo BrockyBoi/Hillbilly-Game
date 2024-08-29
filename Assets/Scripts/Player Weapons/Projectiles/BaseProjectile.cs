@@ -54,15 +54,26 @@ namespace Weaponry
         [Range(0, 50)]
         public int ProjectileArcCount;
 
-        public ProjectileData(float speed, float sizeMultiplier, bool canKnockBack, float knockbackAmount, float knockBackTiming, bool canKnockbackIntoOtherEnemies, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount)
+        [Title("Explosion")]
+        public bool CanProjectileExplode;
+
+        [ShowIf("CanProjectileExplode")]
+        public GameObject ExplosionPrefab;
+
+        public ProjectileData(float speed, float sizeMultiplier, bool canKnockBack, float knockbackAmount, float knockBackTiming, bool canKnockbackIntoOtherEnemies, float damageToDeal, float timeBetweenDamage, float weaponDuration, int numberOfEnemiesToPassThrough, bool canPassThroughUnlimitedEnemies, bool canWeaponArc, int arcCount, bool canExplode, GameObject explosionPrefab)
         {
+            // Base stats
             this.ProjectileSpeed = speed;
             this.ProjectileSizeMultiplier = sizeMultiplier;
             this.DamageToDeal = damageToDeal;
             this.WeaponDuration = weaponDuration;
             this.TimeBetweenDamage = timeBetweenDamage;
+
+            // Pass Through
             this.NumberOfEnemiesCanPassThrough = numberOfEnemiesToPassThrough;
             this.CanPassThroughUnlimitedEnemies = canPassThroughUnlimitedEnemies;
+
+            // Arc
             this.CanWeaponArc = canWeaponArc;
             this.ProjectileArcCount = arcCount;
 
@@ -71,7 +82,16 @@ namespace Weaponry
             this.CanKnockbackIntoOtherEnemies = canKnockbackIntoOtherEnemies;
             this.KnockbackTime = knockBackTiming;
             this.CanKnockback = canKnockBack;
+
+            // Explosion
+            this.CanProjectileExplode = canExplode;
+            this.ExplosionPrefab = explosionPrefab;
         }
+    }
+
+    public struct AOEData
+    {
+
     }
 
     [RequireComponent(typeof(BoxCollider2D))]
@@ -95,13 +115,16 @@ namespace Weaponry
 
         [Title("Base Projectile Data")]
         [SerializeField]
-        private float _maxDistanceFromPlayerBeforeDestroy = 15;
+        private float _maxDistanceFromPlayerBeforeDestroy = 100;
 
         private Vector3 _initialScale = Vector3.zero;
 
         IEnumerator _damageAllEnemiesInRange;
 
         protected bool _initialized = false;
+
+        protected PoolableObjectsComponent<BaseProjectile> _poolForExtraProjectileToSpawnOnContact = new PoolableObjectsComponent<BaseProjectile>();
+        public PoolableObjectsComponent<BaseProjectile> PoolForExtraProjectileToSpawnOnContact { get { return _poolForExtraProjectileToSpawnOnContact; } }
 
         protected virtual void Awake()
         {
@@ -159,9 +182,14 @@ namespace Weaponry
             {
                 StartCoroutine(DisableAfterProjectileDuration());
             }
+
+            if (_projectileData.CanProjectileExplode && !_poolForExtraProjectileToSpawnOnContact.IsInitialized())
+            {
+                _poolForExtraProjectileToSpawnOnContact.Initialize(_projectileData.ExplosionPrefab);
+            }
         }
 
-        public void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData, Vector3 direction)
+        public virtual void InitializeProjectile(PlayerWeapon weapon, ProjectileData projectileData, Vector3 direction)
         {
             direction.Normalize();
             _direction = direction;
@@ -255,6 +283,11 @@ namespace Weaponry
                     {
                         AddXP(enemy);
                     }
+                }
+
+                if (_projectileData.CanProjectileExplode)
+                {
+
                 }
             }
         }

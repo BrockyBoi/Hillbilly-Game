@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Weaponry
 {
-    public class LingeringAOEProjectile : AOEProjectile
+    public class AOEProjectile : BaseProjectile
     {
         protected override void MoveProjectile()
         {
-            // Keep empty 
+            // Leave empty on purpose
         }
     }
 }

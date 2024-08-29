@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35a36003b1f216f439872a5eb383969b, type: 3}
   m_Name: MagneticTrait
   m_EditorClassIdentifier: 
-  TraitName: Speedster
+  TraitName: Magnetic
   Trait:
     _characterAttributes:
     - AttributeType: 7

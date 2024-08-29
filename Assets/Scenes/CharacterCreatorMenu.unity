@@ -588,6 +588,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 514894263277337464, guid: 1fca196d331787e40be1509770091ed6, type: 3}
+      propertyPath: _allWeaponsData.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: d5b3ef04f0877ab4ab75f8fed577a0c2, type: 2}
     - target: {fileID: 906251251940734969, guid: 1fca196d331787e40be1509770091ed6, type: 3}
       propertyPath: m_Name
       value: DataManagers

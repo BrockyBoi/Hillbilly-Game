@@ -17,6 +17,11 @@ public class PoolableObjectsComponent<T>  where T : MonoBehaviour, IPoolableObje
         _prefab = prefab;
     }
 
+    public bool IsInitialized()
+    {
+        return _prefab;
+    }
+
     public void AddObjectToPool(T poolableObject)
     {
         _pool.Enqueue(poolableObject);
